@@ -111,6 +111,9 @@ importers:
       nextjs-cors:
         specifier: ^2.1.2
         version: registry.npmmirror.com/nextjs-cors@2.1.2(next@13.5.2)
+      pdfjs-dist:
+        specifier: ^4.0.269
+        version: registry.npmmirror.com/pdfjs-dist@4.0.269(encoding@0.1.13)
       pg:
         specifier: ^8.10.0
         version: registry.npmmirror.com/pg@8.10.0
