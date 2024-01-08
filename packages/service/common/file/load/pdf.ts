@@ -1,6 +1,7 @@
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 // @ts-ignore
 import('pdfjs-dist/legacy/build/pdf.worker.min.mjs');
+import { ReadFileParams } from './type';
 
 type TokenType = {
   str: string;
@@ -12,7 +13,7 @@ type TokenType = {
   hasEOL: boolean;
 };
 
-export const readPdfFile = async ({ pdf }: { pdf: string | URL | ArrayBuffer }) => {
+export const readPdfFile = async ({ path }: ReadFileParams) => {
   const readPDFPage = async (doc: any, pageNo: number) => {
     const page = await doc.getPage(pageNo);
     const tokenizedText = await page.getTextContent();
@@ -50,7 +51,7 @@ export const readPdfFile = async ({ pdf }: { pdf: string | URL | ArrayBuffer }) 
       .join('');
   };
 
-  const loadingTask = pdfjs.getDocument(pdf);
+  const loadingTask = pdfjs.getDocument(path);
   const doc = await loadingTask.promise;
 
   const pageTextPromises = [];
@@ -61,5 +62,7 @@ export const readPdfFile = async ({ pdf }: { pdf: string | URL | ArrayBuffer }) 
 
   loadingTask.destroy();
 
-  return pageTexts.join('');
+  return {
+    rawText: pageTexts.join('')
+  };
 };
