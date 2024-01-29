@@ -183,8 +183,29 @@ const MyApps = () => {
       )}
       <ConfirmModal />
       {isOpenCreateModal && (
-        <CreateModal onClose={onCloseCreateModal} onSuccess={() => loadMyApps(true)} />
+        <CreateModal
+          teamsTags={teamsTags}
+          onClose={onCloseCreateModal}
+          onSuccess={() => loadMyApps(true)}
+        />
       )}
+      {/* {isOpenShareModal && (
+        <ShareAppModal 
+          type='share'
+          onCreate={() => {
+          
+          }}
+          onEdit={() => {
+            toast({
+              status: 'success',
+              title: t('common.Update Successful')
+            });
+            refetchShareChatList();
+            setEditLinkData(undefined);
+          }}
+          onClose={onCloseShareModal} 
+          onSuccess={() => loadMyApps(true)} />
+      )} */}
     </PageContainer>
   );
 };

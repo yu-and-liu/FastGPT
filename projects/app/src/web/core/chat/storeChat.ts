@@ -59,6 +59,13 @@ export const useChatStore = create<State>()(
           });
           return null;
         },
+        async loadHistoriesBy(e) {
+          const data = await getChatHistories(e);
+          set((state) => {
+            state.histories = data;
+          });
+          return null;
+        },
         async delOneHistory(props) {
           set((state) => {
             state.histories = state.histories.filter((item) => item.chatId !== props.chatId);
