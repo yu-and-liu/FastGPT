@@ -28,6 +28,7 @@ const Auth = ({ children }: { children: JSX.Element }) => {
       if (unAuthPage[router.pathname] === true || userInfo) {
         return null;
       } else {
+        //return initUserInfo();
         return initUserInfo();
       }
     },
