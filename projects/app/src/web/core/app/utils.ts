@@ -1,4 +1,4 @@
-import { AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
+import { AppEditFormType } from '@fastgpt/global/core/app/type';
 import { ModuleItemType } from '@fastgpt/global/core/module/type';
 import { POST } from '@/web/common/api/request';
 import { chatModelList } from '@/web/common/system/staticData';
@@ -6,11 +6,8 @@ import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from '@fastgpt/global/core/mo
 import { ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
 import type { FormatForm2ModulesProps } from '@fastgpt/global/core/app/api.d';
 
-export async function postForm2Modules(
-  data: AppSimpleEditFormType,
-  templateId = 'fastgpt-universal'
-) {
-  function userGuideTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
+export async function postForm2Modules(data: AppEditFormType, templateId = 'fastgpt-universal') {
+  function userGuideTemplate(formData: AppEditFormType): ModuleItemType[] {
     return [
       {
         name: 'core.module.template.User guide',

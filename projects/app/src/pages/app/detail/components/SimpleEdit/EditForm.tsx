@@ -14,7 +14,7 @@ import { QuestionOutlineIcon, SmallAddIcon } from '@chakra-ui/icons';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { appModules2Form, getDefaultAppForm } from '@fastgpt/global/core/app/utils';
-import type { AppSimpleEditFormType } from '@fastgpt/global/core/app/type.d';
+import type { AppEditFormType } from '@fastgpt/global/core/app/type.d';
 import {
   chatModelList,
   reRankModelList,
@@ -42,6 +42,7 @@ import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import SelectAiModel from '@/components/Select/SelectAiModel';
 import PromptEditor from '@fastgpt/web/components/common/Textarea/PromptEditor';
 import { formatVariablesIcon } from '@fastgpt/global/core/module/utils';
+import DeleteIcon from '@fastgpt/web/components/common/Icon/delete';
 
 const DatasetSelectModal = dynamic(() => import('@/components/core/module/DatasetSelectModal'));
 const DatasetParamsModal = dynamic(() => import('@/components/core/module/DatasetParamsModal'));
@@ -51,6 +52,7 @@ const TTSSelect = dynamic(
 );
 const QGSwitch = dynamic(() => import('@/components/core/module/Flow/components/modules/QGSwitch'));
 const CfrEditModal = dynamic(() => import('./CfrEditModal'));
+const ToolsChoice = dynamic(() => import('./ToolChoice'));
 
 const EditForm = ({
   divRef,
@@ -68,45 +70,28 @@ const EditForm = ({
   const [refresh, setRefresh] = useState(false);
   const [, startTst] = useTransition();
 
-  const { setValue, getValues, reset, handleSubmit, control, watch } =
-    useForm<AppSimpleEditFormType>({
-      defaultValues: getDefaultAppForm()
-    });
-
-  const { fields: datasets, replace: replaceKbList } = useFieldArray({
-    control,
-    name: 'dataset.datasets'
+  const { setValue, getValues, reset, handleSubmit, control, watch } = useForm<AppEditFormType>({
+    defaultValues: getDefaultAppForm()
   });
 
+  const {
+    isOpen: isOpenToolsChoice,
+    onOpen: onOpenToolsChoice,
+    onClose: onCloseToolsChoice
+  } = useDisclosure();
   const {
     isOpen: isOpenAIChatSetting,
     onOpen: onOpenAIChatSetting,
     onClose: onCloseAIChatSetting
-  } = useDisclosure();
-  const {
-    isOpen: isOpenDatasetSelect,
-    onOpen: onOpenKbSelect,
-    onClose: onCloseKbSelect
-  } = useDisclosure();
-  const {
-    isOpen: isOpenDatasetParams,
-    onOpen: onOpenDatasetParams,
-    onClose: onCloseDatasetParams
-  } = useDisclosure();
-  const {
-    isOpen: isOpenCfrModal,
-    onOpen: onOpenCfrModal,
-    onClose: onCloseCfrModal
   } = useDisclosure();
 
   const { openConfirm: openConfirmSave, ConfirmModal: ConfirmSaveModal } = useConfirm({
     content: t('core.app.edit.Confirm Save App Tip')
   });
 
-  const variables = watch('userGuide.variables');
+  const variables = watch('variables');
   const formatVariables = useMemo(() => formatVariablesIcon(variables), [variables]);
-  const aiSystemPrompt = watch('aiSettings.systemPrompt');
-  const searchMode = watch('dataset.searchMode');
+  const tools = watch('tools');
 
   const chatModelSelectList = (() =>
     chatModelList.map((item) => ({
@@ -114,36 +99,12 @@ const EditForm = ({
       label: item.name
     })))();
 
-  const selectDatasets = useMemo(
-    () => allDatasets.filter((item) => datasets.find((dataset) => dataset.datasetId === item._id)),
-    [allDatasets, datasets]
-  );
-
-  const selectSimpleTemplate = (() =>
-    simpleModeTemplates?.find((item) => item.id === getValues('templateId')) ||
-    SimpleModeTemplate_FastGPT_Universal)();
-
-  const tokenLimit = useMemo(() => {
-    return (
-      chatModelList.find((item) => item.model === getValues('aiSettings.model'))?.quoteMaxToken ||
-      3000
-    );
-  }, [getValues, refresh]);
-
-  const datasetSearchMode = useMemo(() => {
-    if (!searchMode) return '';
-    return t(DatasetSearchModeMap[searchMode]?.title);
-  }, [searchMode, t]);
-
   const { mutate: onSubmitSave, isLoading: isSaving } = useRequest({
-    mutationFn: async (data: AppSimpleEditFormType) => {
-      const modules = await postForm2Modules(data, data.templateId);
-
+    mutationFn: async (data: AppEditFormType) => {
+      // const modules = await postForm2Modules(data, data.templateId);
       await updateAppDetail(appDetail._id, {
-        modules,
-        type: AppTypeEnum.simple,
-        simpleTemplateId: data.templateId,
-        permission: undefined
+        permission: undefined,
+        ...data
       });
     },
     successToast: t('common.Save Success'),
@@ -153,10 +114,7 @@ const EditForm = ({
   const { isSuccess: isInitd } = useQuery(
     ['init', appDetail],
     () => {
-      const formatVal = appModules2Form({
-        templateId: appDetail.simpleTemplateId,
-        modules: appDetail.modules
-      });
+      const formatVal = appModules2Form(appDetail);
       reset(formatVal);
       setRefresh(!refresh);
       return formatVal;
@@ -165,7 +123,6 @@ const EditForm = ({
       enabled: !!appDetail._id
     }
   );
-  useQuery(['loadAllDatasets'], loadAllDatasets);
 
   const BoxStyles: BoxProps = {
     px: 5,
@@ -232,97 +189,110 @@ const EditForm = ({
 
       <Box px={4}>
         <Box bg={'white'} borderRadius={'md'} borderWidth={'1px'} borderColor={'borderColor.base'}>
-          {/* simple mode select */}
-          <Flex {...BoxStyles}>
+          {/* Tool choice */}
+          <Box {...BoxStyles}>
             <Flex alignItems={'center'} flex={'1 0 0'}>
               <MyIcon name={'core/app/simpleMode/template'} w={'20px'} />
-              <Box mx={2}>{t('core.app.simple.mode template select')}</Box>
+              <Box mx={2} flex={'1 0 0'}>
+                {t('core.app.settings.tools choice')}
+              </Box>
+
+              <Flex alignItems={'center'} {...BoxBtnStyles} onClick={onOpenToolsChoice}>
+                <SmallAddIcon />
+                {t('common.Choose')}
+              </Flex>
             </Flex>
-            <MySelect
-              w={['200px', '250px']}
-              list={
-                simpleModeTemplates?.map((item) => ({
-                  alias: t(item.name),
-                  label: t(item.desc),
-                  value: item.id
-                })) || []
-              }
-              value={getValues('templateId')}
-              onchange={(val) => {
-                setValue('templateId', val);
-                setRefresh(!refresh);
-              }}
-            />
-          </Flex>
+            <Grid mt={tools.length > 0 ? 2 : 0} gridTemplateColumns={['1fr', '1fr 1fr']} gap={3}>
+              {tools.map((tool) => (
+                <Flex
+                  key={tool.id}
+                  py={2}
+                  px={4}
+                  borderRadius={'md'}
+                  bg={'myGray.100'}
+                  alignItems={'center'}
+                  _hover={{
+                    '& .delete': {
+                      display: 'block'
+                    }
+                  }}
+                >
+                  <Avatar src={tool.avatar} w={'20px'} />
+                  <Box flex={'1 0 0'} w={0} mx={2} fontSize={'sm'} color={'black'}>
+                    {tool.name}
+                  </Box>
+                  <DeleteIcon
+                    ml={2}
+                    onClick={() => {
+                      setValue(
+                        'tools',
+                        tools.filter((item) => item.id !== tool.id)
+                      );
+                    }}
+                  />
+                </Flex>
+              ))}
+            </Grid>
+          </Box>
 
           {/* ai */}
-          {selectSimpleTemplate?.systemForm?.aiSettings && (
-            <Box {...BoxStyles}>
-              <Flex alignItems={'center'}>
-                <MyIcon name={'core/app/simpleMode/ai'} w={'20px'} />
-                <Box ml={2} flex={1}>
-                  {t('app.AI Settings')}
-                </Box>
-                {(selectSimpleTemplate.systemForm.aiSettings.maxToken ||
-                  selectSimpleTemplate.systemForm.aiSettings.temperature ||
-                  selectSimpleTemplate.systemForm.aiSettings.quoteTemplate ||
-                  selectSimpleTemplate.systemForm.aiSettings.quotePrompt) && (
-                  <Flex {...BoxBtnStyles} onClick={onOpenAIChatSetting}>
-                    <MyIcon mr={1} name={'common/settingLight'} w={'14px'} />
-                    {t('common.More settings')}
-                  </Flex>
-                )}
-              </Flex>
-              {selectSimpleTemplate.systemForm.aiSettings?.model && (
-                <Flex alignItems={'center'} mt={5}>
-                  <Box {...LabelStyles}>{t('core.ai.Model')}</Box>
-                  <Box flex={'1 0 0'}>
-                    <SelectAiModel
-                      width={'100%'}
-                      value={getValues(`aiSettings.model`)}
-                      list={chatModelSelectList}
-                      onchange={(val: any) => {
-                        setValue('aiSettings.model', val);
-                        const maxToken =
-                          chatModelList.find((item) => item.model === getValues('aiSettings.model'))
-                            ?.maxResponse || 4000;
-                        const token = maxToken / 2;
-                        setValue('aiSettings.maxToken', token);
-                        setRefresh(!refresh);
-                      }}
-                    />
-                  </Box>
-                </Flex>
-              )}
+          {/* <Box {...BoxStyles}>
+            <Flex alignItems={'center'}>
+              <MyIcon name={'core/app/simpleMode/ai'} w={'20px'} />
+              <Box ml={2} flex={1}>
+                {t('app.AI Settings')}
+              </Box>
 
-              {selectSimpleTemplate.systemForm.aiSettings?.systemPrompt && (
-                <Flex mt={10} alignItems={'flex-start'}>
-                  <Box {...LabelStyles}>
-                    {t('core.ai.Prompt')}
-                    <MyTooltip label={t(chatNodeSystemPromptTip)} forceShow>
-                      <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
-                    </MyTooltip>
-                  </Box>
-                  {isInitd && (
-                    <PromptEditor
-                      defaultValue={aiSystemPrompt}
-                      onChange={(text) => {
-                        startTst(() => {
-                          setValue('aiSettings.systemPrompt', text);
-                        });
-                      }}
-                      variables={formatVariables}
-                      placeholder={t('core.app.tip.chatNodeSystemPromptTip')}
-                      title={t('core.ai.Prompt')}
-                    />
-                  )}
-                </Flex>
+              <Flex {...BoxBtnStyles} onClick={onOpenAIChatSetting}>
+                <MyIcon mr={1} name={'common/settingLight'} w={'14px'} />
+                {t('common.More settings')}
+              </Flex>
+            </Flex>
+            <Flex alignItems={'center'} mt={5}>
+              <Box {...LabelStyles}>{t('core.ai.Model')}</Box>
+              <Box flex={'1 0 0'}>
+                <SelectAiModel
+                  width={'100%'}
+                  value={getValues(`aiSettings.model`)}
+                  list={chatModelSelectList}
+                  onchange={(val: any) => {
+                    setValue('aiSettings.model', val);
+                    const maxToken =
+                      chatModelList.find((item) => item.model === getValues('aiSettings.model'))
+                        ?.maxResponse || 4000;
+                    const token = maxToken / 2;
+                    setValue('aiSettings.maxToken', token);
+                    setRefresh(!refresh);
+                  }}
+                />
+              </Box>
+            </Flex>
+
+            <Flex mt={10} alignItems={'flex-start'}>
+              <Box {...LabelStyles}>
+                {t('core.ai.Prompt')}
+                <MyTooltip label={t(chatNodeSystemPromptTip)} forceShow>
+                  <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
+                </MyTooltip>
+              </Box>
+              {isInitd && (
+                <PromptEditor
+                  defaultValue={aiSystemPrompt}
+                  onChange={(text) => {
+                    startTst(() => {
+                      setValue('aiSettings.systemPrompt', text);
+                    });
+                  }}
+                  variables={formatVariables}
+                  placeholder={t('core.app.tip.chatNodeSystemPromptTip')}
+                  title={t('core.ai.Prompt')}
+                />
               )}
-            </Box>
-          )}
+            </Flex>
+          </Box> */}
 
           {/* dataset */}
-          {selectSimpleTemplate?.systemForm?.dataset && (
+          {/* {selectSimpleTemplate?.systemForm?.dataset && (
             <Box {...BoxStyles}>
               <Flex alignItems={'center'}>
                 <Flex alignItems={'center'} flex={1}>
@@ -404,91 +374,78 @@ const EditForm = ({
                 ))}
               </Grid>
             </Box>
-          )}
-
-          {/* cfr */}
-          {selectSimpleTemplate?.systemForm?.cfr && getValues('dataset.datasets').length > 0 && (
-            <Flex {...BoxStyles} alignItems={'center'}>
-              <Image src={'/imgs/module/cfr.svg'} alt={''} w={'18px'} />
-              <Box ml={2}>{t('core.module.template.cfr')}</Box>
-              <MyTooltip label={t('core.module.template.cfr intro')} forceShow>
-                <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
-              </MyTooltip>
-              <Box flex={1} />
-              <Flex {...BoxBtnStyles} onClick={onOpenCfrModal}>
-                {getValues('cfr.background') === 'none' ? t('common.Not open') : t('common.Opened')}
-              </Flex>
-            </Flex>
-          )}
+          )} */}
 
           {/* variable */}
-          {selectSimpleTemplate?.systemForm?.userGuide?.variables && (
-            <Box {...BoxStyles}>
-              <VariableEdit
-                variables={variables}
-                onChange={(e) => {
-                  setValue('userGuide.variables', e);
-                  setRefresh(!refresh);
-                }}
-              />
-            </Box>
-          )}
+          <Box {...BoxStyles}>
+            <VariableEdit
+              variables={variables}
+              onChange={(e) => {
+                setValue('variables', e);
+                setRefresh(!refresh);
+              }}
+            />
+          </Box>
 
           {/* welcome */}
-          {selectSimpleTemplate?.systemForm?.userGuide?.welcomeText && (
-            <Box {...BoxStyles}>
-              <Flex alignItems={'center'}>
-                <MyIcon name={'core/app/simpleMode/chat'} w={'20px'} />
-                <Box mx={2}>{t('core.app.Welcome Text')}</Box>
-                <MyTooltip label={t(welcomeTextTip)} forceShow>
-                  <QuestionOutlineIcon />
-                </MyTooltip>
-              </Flex>
-              <MyTextarea
-                mt={2}
-                bg={'myWhite.400'}
-                rows={5}
-                placeholder={t(welcomeTextTip)}
-                defaultValue={getValues('userGuide.welcomeText')}
-                onBlur={(e) => {
-                  setValue('userGuide.welcomeText', e.target.value || '');
-                }}
-              />
-            </Box>
-          )}
+          <Box {...BoxStyles}>
+            <Flex alignItems={'center'}>
+              <MyIcon name={'core/app/simpleMode/chat'} w={'20px'} />
+              <Box mx={2}>{t('core.app.Welcome Text')}</Box>
+              <MyTooltip label={t(welcomeTextTip)} forceShow>
+                <QuestionOutlineIcon />
+              </MyTooltip>
+            </Flex>
+            <MyTextarea
+              mt={2}
+              bg={'myWhite.400'}
+              rows={5}
+              placeholder={t(welcomeTextTip)}
+              defaultValue={getValues('welcomeText')}
+              onBlur={(e) => {
+                setValue('welcomeText', e.target.value || '');
+              }}
+            />
+          </Box>
 
           {/* tts */}
-          {selectSimpleTemplate?.systemForm?.userGuide?.tts && (
-            <Box {...BoxStyles}>
-              <TTSSelect
-                value={getValues('userGuide.tts')}
-                onChange={(e) => {
-                  setValue('userGuide.tts', e);
-                  setRefresh((state) => !state);
-                }}
-              />
-            </Box>
-          )}
+          <Box {...BoxStyles}>
+            <TTSSelect
+              value={getValues('tts')}
+              onChange={(e) => {
+                setValue('tts', e);
+                setRefresh((state) => !state);
+              }}
+            />
+          </Box>
 
           {/* question guide */}
-          {selectSimpleTemplate?.systemForm?.userGuide?.questionGuide && (
-            <Box {...BoxStyles} borderBottom={'none'}>
-              <QGSwitch
-                isChecked={getValues('userGuide.questionGuide')}
-                size={'lg'}
-                onChange={(e) => {
-                  const value = e.target.checked;
-                  setValue('userGuide.questionGuide', value);
-                  setRefresh((state) => !state);
-                }}
-              />
-            </Box>
-          )}
+          <Box {...BoxStyles} borderBottom={'none'}>
+            <QGSwitch
+              isChecked={getValues('questionGuide')}
+              size={'lg'}
+              onChange={(e) => {
+                const value = e.target.checked;
+                setValue('questionGuide', value);
+                setRefresh((state) => !state);
+              }}
+            />
+          </Box>
         </Box>
       </Box>
 
       <ConfirmSaveModal bg={appDetail.type === AppTypeEnum.simple ? '' : 'red.600'} countDown={5} />
-      {isOpenAIChatSetting && (
+      {isOpenToolsChoice && (
+        <ToolsChoice
+          selectTools={getValues('tools')}
+          onChangeTools={(e) => {
+            setValue('tools', e);
+            setRefresh((state) => !state);
+          }}
+          onClose={onCloseToolsChoice}
+        />
+      )}
+      {/* {isOpenAIChatSetting && (
         <AIChatSettingsModal
           onClose={onCloseAIChatSetting}
           onSuccess={(e) => {
@@ -496,11 +453,10 @@ const EditForm = ({
             onCloseAIChatSetting();
           }}
           defaultData={getValues('aiSettings')}
-          simpleModeTemplate={selectSimpleTemplate}
           pickerMenu={formatVariables}
         />
-      )}
-      {isOpenDatasetSelect && (
+      )} */}
+      {/* {isOpenDatasetSelect && (
         <DatasetSelectModal
           isOpen={isOpenDatasetSelect}
           defaultSelectedDatasets={selectDatasets.map((item) => ({
@@ -555,7 +511,7 @@ const EditForm = ({
             setValue('cfr.background', e);
           }}
         />
-      )}
+      )} */}
     </Box>
   );
 };

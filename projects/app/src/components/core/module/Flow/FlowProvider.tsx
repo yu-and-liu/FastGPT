@@ -40,10 +40,10 @@ export type useFlowProviderStoreType = {
   filterAppIds: string[];
   nodes: Node<FlowModuleItemType, string | undefined>[];
   setNodes: Dispatch<SetStateAction<Node<FlowModuleItemType, string | undefined>[]>>;
-  onNodesChange: OnChange<NodeChange>;
+  customOnNodesChange: OnChange<NodeChange>;
   edges: Edge<any>[];
   setEdges: Dispatch<SetStateAction<Edge<any>[]>>;
-  onEdgesChange: OnChange<EdgeChange>;
+  customOnEdgeChange: OnChange<EdgeChange>;
   onFixView: () => void;
   onDelNode: (nodeId: string) => void;
   onChangeNode: (e: FlowNodeChangeProps) => void;
@@ -76,14 +76,14 @@ const StateContext = createContext<useFlowProviderStoreType>({
   ): void {
     return;
   },
-  onNodesChange: function (changes: NodeChange[]): void {
+  customOnNodesChange: function (changes: NodeChange[]): void {
     return;
   },
   edges: [],
   setEdges: function (value: React.SetStateAction<Edge<any>[]>): void {
     return;
   },
-  onEdgesChange: function (changes: EdgeChange[]): void {
+  customOnEdgeChange: function (changes: EdgeChange[]): void {
     return;
   },
   onFixView: function (): void {
@@ -225,10 +225,57 @@ export const FlowProvider = ({
 
   const onDelNode = useCallback(
     (nodeId: string) => {
+      // check tool io node
+      const node = nodes.find((node) => node.id === nodeId);
+      if (
+        node?.data?.flowType === FlowNodeTypeEnum.pluginInput ||
+        node?.data?.flowType === FlowNodeTypeEnum.pluginOutput
+      ) {
+        return;
+      }
+
       setNodes((state) => state.filter((item) => item.id !== nodeId));
       setEdges((state) => state.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
     },
-    [setEdges, setNodes]
+    [nodes, setEdges, setNodes]
+  );
+
+  const customOnNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      const filterChanges = changes.filter((change) => {
+        if (change.type === 'remove') {
+          onDelConnect(change.id);
+          return false;
+        }
+        return true;
+      });
+      onNodesChange(filterChanges);
+    },
+    [onDelConnect, onNodesChange]
+  );
+  const customOnEdgeChange = useCallback(
+    (changes: EdgeChange[]) => {
+      console.log(edges, changes);
+
+      const filterIONodeEdges = changes.filter((change) => {
+        // @ts-ignore
+        const edge = edges.find((edge) => change.type === 'remove' && edge.id === change.id);
+        if (edge) {
+          const node = nodes.find((node) => node.id === edge.source);
+          if (
+            node?.data?.flowType === FlowNodeTypeEnum.pluginInput ||
+            node?.data?.flowType === FlowNodeTypeEnum.pluginOutput
+          ) {
+            return false;
+          }
+        }
+        return true;
+      });
+      console.log(filterIONodeEdges);
+
+      onEdgesChange(filterIONodeEdges);
+    },
+    [edges, nodes, onEdgesChange]
   );
 
   /* change */
@@ -449,10 +496,10 @@ export const FlowProvider = ({
     filterAppIds,
     nodes,
     setNodes,
-    onNodesChange,
+    customOnNodesChange,
     edges,
     setEdges,
-    onEdgesChange,
+    customOnEdgeChange,
     onFixView,
     onDelNode,
     onChangeNode,

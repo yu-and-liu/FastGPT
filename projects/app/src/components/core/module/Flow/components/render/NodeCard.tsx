@@ -21,6 +21,7 @@ type Props = FlowModuleItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
   minW?: string | number;
   isPreview?: boolean;
+  isIO?: boolean;
 };
 
 const NodeCard = (props: Props) => {
@@ -34,7 +35,8 @@ const NodeCard = (props: Props) => {
     moduleId,
     flowType,
     inputs,
-    isPreview
+    isPreview,
+    isIO
   } = props;
 
   const theme = useTheme();
@@ -114,7 +116,6 @@ const NodeCard = (props: Props) => {
         label: t('common.Delete'),
         onClick: () => onDelNode(moduleId)
       },
-
       {
         icon: 'common/backLight',
         label: t('common.Back'),
@@ -145,7 +146,7 @@ const NodeCard = (props: Props) => {
           </MyTooltip>
         )}
         <Box flex={1} />
-        {!isPreview && (
+        {!isPreview && !isIO && (
           <Menu autoSelect={false} isLazy>
             <MenuButton
               className={'nodrag'}

@@ -57,6 +57,7 @@
   "common": {
     "Add": "添加",
     "Add New": "新增",
+    "Added": "已添加",
     "All": "全部",
     "Back": "返回",
     "Beta": "实验版",
@@ -291,9 +292,9 @@
         "Source And Time": "来源 & 时间"
       },
       "navbar": {
+        "App config": "应用配置",
         "External": "外部使用",
-        "Flow mode": "高级编排",
-        "Simple mode": "简易配置"
+        "Flow mode": "高级编排(弃用)"
       },
       "outLink": {
         "Can Drag": "图标可拖拽",
@@ -310,6 +311,12 @@
         "Web Link": "网络链接"
       },
       "setting": "应用信息设置",
+      "settings": {
+        "Confirm delete the tool": "确认删除该工具？",
+        "Update tool config": "变更",
+        "tool params config": "工具参数配置",
+        "tools choice": "工具选择"
+      },
       "share": {
         "Amount limit tip": "最多创建10组",
         "Create link": "创建新链接",
@@ -318,9 +325,6 @@
         "Is response quote": "返回引用",
         "Not share link": "没有创建分享链接",
         "Role check": "身份校验"
-      },
-      "simple": {
-        "mode template select": "简易模板"
       },
       "template": {
         "Classify and dataset": "问题分类 + 知识库",

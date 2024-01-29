@@ -11,6 +11,7 @@ import { TrackEventName } from '@/constants/common';
 import { AppSimpleEditConfigTemplateType } from '@fastgpt/global/core/app/type';
 import { FastGPTFeConfigsType, SystemEnvType } from '@fastgpt/global/common/system/types';
 import { SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
+import { SystemToolItemType } from '@fastgpt/global/core/tool/type.d';
 
 export type PagingData<T> = {
   pageNum: number;
@@ -43,6 +44,7 @@ declare global {
   var systemVersion: string;
 
   var simpleModeTemplates: AppSimpleEditConfigTemplateType[];
+  var systemTools: SystemToolItemType[];
 
   interface Window {
     grecaptcha: any;

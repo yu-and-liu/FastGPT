@@ -1,0 +1,125 @@
+{
+  "author": "FastGPT",
+  "name": "知识库搜索",
+  "avatar": "/imgs/module/customFeedback.svg",
+  "desc": "对团队内的知识库进行搜索",
+  "input": {
+    "moduleId": "w90mfp",
+    "name": "定义工具输入",
+    "avatar": "/imgs/module/input.png",
+    "flowType": "pluginInput",
+    "showStatus": false,
+    "position": {
+      "x": 515.1887815471657,
+      "y": -169.04905809653783
+    },
+    "inputs": [
+      {
+        "key": "defaultFeedback",
+        "valueType": "string",
+        "label": "默认反馈内容",
+        "type": "textarea",
+        "required": false,
+        "description": "",
+        "edit": true,
+        "editField": {
+          "key": true,
+          "name": true,
+          "description": true,
+          "required": true,
+          "dataType": true,
+          "inputType": true
+        },
+        "connected": true
+      },
+      {
+        "key": "customFeedback",
+        "valueType": "string",
+        "label": "自定义反馈内容",
+        "type": "target",
+        "required": false,
+        "description": "",
+        "edit": true,
+        "editField": {
+          "key": true,
+          "name": true,
+          "description": true,
+          "required": true,
+          "dataType": true,
+          "inputType": true
+        },
+        "connected": true
+      }
+    ],
+    "outputs": [
+      {
+        "key": "defaultFeedback",
+        "valueType": "string",
+        "label": "默认反馈内容",
+        "type": "source",
+        "edit": true,
+        "targets": [
+          {
+            "moduleId": "49de3g",
+            "key": "defaultFeedback"
+          }
+        ]
+      },
+      {
+        "key": "customFeedback",
+        "valueType": "string",
+        "label": "自定义反馈内容",
+        "type": "source",
+        "edit": true,
+        "targets": [
+          {
+            "moduleId": "49de3g",
+            "key": "customFeedback"
+          }
+        ]
+      }
+    ]
+  },
+  "output": {
+    "moduleId": "b1evbd8xl8qa",
+    "name": "定义工具输出",
+    "avatar": "/imgs/module/output.png",
+    "flowType": "pluginOutput",
+    "showStatus": false,
+    "position": {
+      "x": 1607.7142331269126,
+      "y": -151.8669210746189
+    },
+    "inputs": [
+      {
+        "key": "11",
+        "valueType": "string",
+        "label": "22",
+        "type": "target",
+        "required": true,
+        "description": "",
+        "edit": true,
+        "editField": {
+          "key": true,
+          "name": true,
+          "description": true,
+          "required": false,
+          "dataType": true,
+          "inputType": false
+        },
+        "connected": true
+      }
+    ],
+    "outputs": [
+      {
+        "key": "11",
+        "valueType": "string",
+        "label": "22",
+        "type": "source",
+        "edit": true,
+        "targets": []
+      }
+    ]
+  },
+  "modules": []
+}

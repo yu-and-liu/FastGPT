@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 
 import ButtonEdge from './components/modules/ButtonEdge';
 import ModuleTemplateList, { type ModuleTemplateProps } from './ModuleTemplateList';
-import { useFlowProviderStore } from './FlowProvider';
+import { useFlowProviderStore, onDelNode } from './FlowProvider';
 
 import 'reactflow/dist/style.css';
 
@@ -34,7 +34,7 @@ const edgeTypes = {
 };
 
 const Container = React.memo(function Container() {
-  const { reactFlowWrapper, nodes, onNodesChange, edges, onEdgesChange, onConnect } =
+  const { reactFlowWrapper, nodes, customOnNodesChange, edges, customOnEdgeChange, onConnect } =
     useFlowProviderStore();
 
   const memoRenderTools = useMemo(
@@ -63,8 +63,8 @@ const Container = React.memo(function Container() {
       connectionLineStyle={{ strokeWidth: 2, stroke: '#5A646Es' }}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
+      onNodesChange={customOnNodesChange}
+      onEdgesChange={customOnEdgeChange}
       onConnect={(connect) => {
         connect.sourceHandle &&
           connect.targetHandle &&

@@ -4,7 +4,7 @@
 */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
-import type { AppSimpleEditFormType } from '@fastgpt/global/core/app/type.d';
+import type { AppEditFormType } from '@fastgpt/global/core/app/type.d';
 import type { ModuleItemType } from '@fastgpt/global/core/module/type';
 import { FormatForm2ModulesProps } from '@fastgpt/global/core/app/api';
 import { getExtractModel } from '@/service/core/ai/model';
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 }
 
-function simpleChatTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
+function simpleChatTemplate(formData: AppEditFormType): ModuleItemType[] {
   return [
     {
       moduleId: 'userChatInput',
@@ -260,7 +260,7 @@ function simpleChatTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
     }
   ];
 }
-function datasetTemplate(formData: AppSimpleEditFormType): ModuleItemType[] {
+function datasetTemplate(formData: AppEditFormType): ModuleItemType[] {
   const modules: ModuleItemType[] = [
     {
       moduleId: 'userChatInput',

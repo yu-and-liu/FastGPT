@@ -11,7 +11,7 @@ import { getSimpleTemplatesFromPlus } from '@/service/core/app/utils';
 import { ToolSourceEnum } from '@fastgpt/global/core/tool/constants';
 import { getFastGPTConfigFromDB } from '@fastgpt/service/common/system/config/controller';
 import { connectToDatabase } from '@/service/mongo';
-import { ToolTemplateType } from '@fastgpt/global/core/tool/type';
+import { SystemToolItemType } from '@fastgpt/global/core/tool/type';
 import { readConfigData } from '@/service/common/system';
 import { exit } from 'process';
 import { FastGPTProUrl } from '@fastgpt/service/common/system/constants';
@@ -72,12 +72,12 @@ export async function getInitConfig() {
       initSystemConfig(),
       getSimpleModeTemplates(),
       getSystemVersion(),
-      getSystemPlugin()
+      getSystemTools()
     ]);
 
     console.log({
       simpleModeTemplates: global.simpleModeTemplates,
-      communityPlugins: global.communityPlugins
+      communityPlugins: global.systemTools
     });
   } catch (error) {
     console.error('Load init config error', error);
@@ -90,9 +90,9 @@ export async function getInitConfig() {
 }
 
 export function initGlobal() {
-  if (global.communityPlugins) return;
+  if (global.systemTools) return;
 
-  global.communityPlugins = [];
+  global.systemTools = [];
   global.simpleModeTemplates = [];
   global.qaQueueLen = global.qaQueueLen ?? 0;
   global.vectorQueueLen = global.vectorQueueLen ?? 0;
@@ -214,25 +214,24 @@ async function getSimpleModeTemplates() {
   }
 }
 
-function getSystemPlugin() {
-  if (global.communityPlugins && global.communityPlugins.length > 0) return;
+function getSystemTools() {
+  if (global.systemTools && global.systemTools.length > 0) return;
 
-  const basePath =
-    process.env.NODE_ENV === 'development' ? 'data/pluginTemplates' : '/app/data/pluginTemplates';
-  // read data/pluginTemplates directory, get all json file
+  const basePath = process.env.NODE_ENV === 'development' ? 'data/tools' : '/app/data/tools';
+  // read data/tools directory, get all json file
   const files = readdirSync(basePath);
   // filter json file
   const filterFiles = files.filter((item) => item.endsWith('.json'));
 
   // read json file
-  const fileTemplates: ToolTemplateType[] = filterFiles.map((filename) => {
+  const fileTemplates: SystemToolItemType[] = filterFiles.map((filename) => {
     const content = readFileSync(`${basePath}/${filename}`, 'utf-8');
     return {
       ...JSON.parse(content),
-      id: `${ToolSourceEnum.community}-${filename.replace('.json', '')}`,
-      source: ToolSourceEnum.community
+      id: `${ToolSourceEnum.system}-${filename.replace('.json', '')}`,
+      source: ToolSourceEnum.system
     };
   });
 
-  global.communityPlugins = fileTemplates;
+  global.systemTools = fileTemplates;
 }

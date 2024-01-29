@@ -57,6 +57,7 @@
   "common": {
     "Add": "Add",
     "Add New": "Add",
+    "Added": "Added",
     "All": "All",
     "Back": "Back",
     "Beta": "Beta",
@@ -291,9 +292,9 @@
         "Source And Time": "Source & Time"
       },
       "navbar": {
+        "App config": "App config",
         "External": "External",
-        "Flow mode": "Flow mode",
-        "Simple mode": "Simple mode"
+        "Flow mode": "Flow mode"
       },
       "outLink": {
         "Can Drag": "Icon Drag",
@@ -310,6 +311,12 @@
         "Web Link": "Web Link"
       },
       "setting": "App Setting",
+      "settings": {
+        "Confirm delete the tool": "Confirm to delete the tool?",
+        "Update tool config": "Update",
+        "tool params config": "Tool params config",
+        "tools choice": "Tools choice"
+      },
       "share": {
         "Amount limit tip": "A maximum of 10 groups can be created",
         "Create link": "Create share",
@@ -318,9 +325,6 @@
         "Is response quote": "Response quote",
         "Not share link": "No share link created",
         "Role check": "Custom role check"
-      },
-      "simple": {
-        "mode template select": "Template"
       },
       "template": {
         "Classify and dataset": "Classification + Dataset",

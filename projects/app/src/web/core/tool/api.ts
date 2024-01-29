@@ -5,7 +5,7 @@ import {
   ToolListItemType,
   UpdateOneToolParams
 } from '@fastgpt/global/core/tool/controller';
-import { ToolItemSchema } from '@fastgpt/global/core/tool/type';
+import { ToolItemSchema, ToolsChoiceItemType } from '@fastgpt/global/core/tool/type';
 
 export const postCreatePlugin = (data: CreateOneToolParams) =>
   POST<string>('/core/tool/create', data);
@@ -16,3 +16,5 @@ export const getPreviewPluginModule = (id: string) =>
   GET<FlowModuleTemplateType>('/core/tool/getPreviewModule', { id });
 export const getOnePlugin = (id: string) => GET<ToolItemSchema>('/core/tool/detail', { id });
 export const delOnePlugin = (id: string) => DELETE('/core/tool/delete', { id });
+
+export const getToolsChoiceList = () => GET<ToolsChoiceItemType[]>('/core/tool/getChoiceList');

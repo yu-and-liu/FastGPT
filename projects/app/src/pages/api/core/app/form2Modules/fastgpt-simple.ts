@@ -4,7 +4,7 @@
 */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
-import type { AppSimpleEditFormType } from '@fastgpt/global/core/app/type.d';
+import type { AppEditFormType } from '@fastgpt/global/core/app/type.d';
 import type { ModuleItemType } from '@fastgpt/global/core/module/type';
 import { FormatForm2ModulesProps } from '@fastgpt/global/core/app/api';
 import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constants';
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 }
 
-type Props = { formData: AppSimpleEditFormType; maxToken: number };
+type Props = { formData: AppEditFormType; maxToken: number };
 
 function simpleChatTemplate({ formData, maxToken }: Props): ModuleItemType[] {
   return [

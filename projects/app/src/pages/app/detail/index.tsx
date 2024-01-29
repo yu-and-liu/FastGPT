@@ -25,7 +25,7 @@ const OutLink = dynamic(() => import('./components/OutLink'), {});
 const Logs = dynamic(() => import('./components/Logs'), {});
 
 enum TabEnum {
-  'simpleEdit' = 'simpleEdit',
+  'settings' = 'settings',
   'adEdit' = 'adEdit',
   'outLink' = 'outLink',
   'logs' = 'logs',
@@ -55,8 +55,8 @@ const AppDetail = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
   const tabList = useMemo(
     () => [
       {
-        label: t('core.app.navbar.Simple mode'),
-        id: TabEnum.simpleEdit,
+        label: t('core.app.navbar.App config'),
+        id: TabEnum.settings,
         icon: 'common/overviewLight'
       },
       ...(feConfigs?.hide_app_flow
@@ -79,7 +79,7 @@ const AppDetail = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
     [t]
   );
 
-  const onCloseFlowEdit = useCallback(() => setCurrentTab(TabEnum.simpleEdit), [setCurrentTab]);
+  const onCloseFlowEdit = useCallback(() => setCurrentTab(TabEnum.settings), [setCurrentTab]);
 
   useEffect(() => {
     const listen =
@@ -189,7 +189,7 @@ const AppDetail = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
             />
           </Box>
           <Box flex={'1 0 0'} h={[0, '100%']} overflow={['overlay', '']}>
-            {currentTab === TabEnum.simpleEdit && <SimpleEdit appId={appId} />}
+            {currentTab === TabEnum.settings && <SimpleEdit appId={appId} />}
             {currentTab === TabEnum.adEdit && appDetail && (
               <FlowEdit app={appDetail} onClose={onCloseFlowEdit} />
             )}
@@ -203,7 +203,7 @@ const AppDetail = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
 };
 
 export async function getServerSideProps(context: any) {
-  const currentTab = context?.query?.currentTab || TabEnum.simpleEdit;
+  const currentTab = context?.query?.currentTab || TabEnum.settings;
 
   return {
     props: { currentTab, ...(await serviceSideProps(context)) }
