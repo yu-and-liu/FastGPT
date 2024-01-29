@@ -28,7 +28,7 @@ export const defaultModules: ModuleItemType[] = [
 ];
 
 export enum ToolSourceEnum {
-  personal = 'personal',
-  community = 'community',
+  team = 'team',
+  system = 'system',
   commercial = 'commercial'
 }

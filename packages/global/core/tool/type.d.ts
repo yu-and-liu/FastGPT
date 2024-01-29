@@ -14,7 +14,33 @@ export type ToolItemSchema = {
   modules: ModuleItemType[];
 };
 
-/* plugin template */
+export type SystemToolItemType = {
+  id: string;
+  author: string;
+  name: string;
+  avatar: string;
+  desc: string;
+  source: `${ToolSourceEnum}`;
+
+  // type: string;
+  input: ModuleItemType;
+  output: ModuleItemType;
+  flows: ModuleItemType[];
+};
+
+export type ToolsChoiceItemType = {
+  id: string;
+  author: string;
+  name: string;
+  avatar: string;
+  desc: string;
+  source: `${ToolSourceEnum}`;
+
+  input: ModuleItemType;
+  output: ModuleItemType;
+};
+
+/* tool template */
 export type ToolTemplateType = ToolRuntimeItemType & {
   author?: string;
   id: string;

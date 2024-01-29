@@ -10,6 +10,7 @@ export type FlowModuleTemplateType = {
   name: string;
   intro: string; // template list intro
   showStatus?: boolean; // chatting response step status
+
   inputs: FlowNodeInputItemType[];
   outputs: FlowNodeOutputItemType[];
 };

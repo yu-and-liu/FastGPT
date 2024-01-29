@@ -7,14 +7,11 @@ import {
   TeamCollectionName,
   TeamMemberCollectionName
 } from '@fastgpt/global/support/user/team/constant';
+import { variableMap } from '@fastgpt/global/core/module/constants';
 
 export const appCollectionName = 'apps';
 
 const AppSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'user'
-  },
   teamId: {
     type: Schema.Types.ObjectId,
     ref: TeamCollectionName,
@@ -46,6 +43,7 @@ const AppSchema = new Schema({
     enum: Object.keys(PermissionTypeMap),
     default: PermissionTypeEnum.private
   },
+
   tools: {
     type: [
       {
@@ -53,6 +51,16 @@ const AppSchema = new Schema({
           // relate tools collections or system tools
           type: String,
           required: true
+        },
+        name: {
+          type: String,
+          required: true
+        },
+        desc: {
+          type: String
+        },
+        avatar: {
+          type: String
         },
         config: {
           // save tool static config
@@ -62,6 +70,53 @@ const AppSchema = new Schema({
       }
     ],
     default: []
+  },
+  welcomeText: {
+    type: String
+  },
+  variables: {
+    type: [
+      {
+        key: {
+          type: String,
+          required: true
+        },
+        label: {
+          type: String,
+          required: true
+        },
+        type: {
+          type: String,
+          enum: Object.keys(variableMap),
+          required: true
+        },
+        required: {
+          type: Boolean,
+          required: true
+        },
+        maxLen: {
+          // input
+          type: Number
+        },
+        enums: {
+          type: [
+            {
+              value: {
+                type: String,
+                required: true
+              }
+            }
+          ],
+          default: []
+        }
+      }
+    ]
+  },
+  questionGuide: {
+    type: Boolean
+  },
+  tts: {
+    type: Object
   },
 
   inited: {

@@ -1,6 +1,6 @@
 import type { ChatModelItemType } from '../ai/model.d';
 import { AppTypeEnum } from './constants';
-import { AppSchema, AppSimpleEditFormType } from './type';
+import { AppSchema, AppEditFormType } from './type';
 
 export type CreateAppParams = {
   name?: string;
@@ -9,18 +9,22 @@ export type CreateAppParams = {
   modules: AppSchema['modules'];
 };
 
-export interface AppUpdateParams {
+export type AppUpdateParams = {
   name?: string;
   type?: `${AppTypeEnum}`;
-  simpleTemplateId?: string;
   avatar?: string;
   intro?: string;
-  modules?: AppSchema['modules'];
   permission?: AppSchema['permission'];
-}
+
+  tools?: AppSchema['tools'];
+  welcomeText?: AppSchema['welcomeText'];
+  variables?: AppSchema['variables'];
+  questionGuide?: AppSchema['questionGuide'];
+  tts?: AppSchema['tts'];
+};
 
 export type FormatForm2ModulesProps = {
-  formData: AppSimpleEditFormType;
+  formData: AppEditFormType;
   chatModelMaxToken: number;
   chatModelList: ChatModelItemType[];
 };

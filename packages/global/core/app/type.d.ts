@@ -16,7 +16,27 @@ export interface AppSchema {
   intro: string;
   updateTime: number;
   permission: `${PermissionTypeEnum}`;
-  tools: { id: string; config: Record<string, any> }[];
+
+  tools: { id: string; name: string; desc: string; avatar?: string; config: Record<string, any> }[];
+  welcomeText: string;
+  variables: {
+    id: string;
+    key: string;
+    label: string;
+    type: `${VariableInputEnum}`;
+    required: boolean;
+    maxLen: number;
+    enums: {
+      value: string;
+    }[];
+  }[];
+  questionGuide: boolean;
+  tts: {
+    type: 'none' | 'web' | 'model';
+    model?: string | undefined;
+    voice?: string | undefined;
+    speed?: number | undefined;
+  };
 
   inited?: boolean;
 
@@ -40,62 +60,22 @@ export type AppDetailType = AppSchema & {
   canWrite: boolean;
 };
 
-// export type AppSimpleEditFormType = {
-//   aiSettings: AIChatModuleProps;
-//   dataset: DatasetModuleProps & {
-//     searchEmptyText: string;
-//   };
-//   userGuide: {
-//     welcomeText: string;
-//     variables: VariableItemType[];
-//     questionGuide: boolean;
-//     tts: AppTTSConfigType;
-//   };
-// };
 // Since useform cannot infer enumeration types, all enumeration keys can only be undone manually
-export type AppSimpleEditFormType = {
-  templateId: string;
-  aiSettings: {
-    model: string;
-    systemPrompt?: string | undefined;
-    temperature: number;
-    maxToken: number;
-    isResponseAnswerText: boolean;
-    quoteTemplate?: string | undefined;
-    quotePrompt?: string | undefined;
-  };
-  dataset: {
-    datasets: SelectedDatasetType;
-    similarity: number;
-    limit: number;
-    searchMode: `${DatasetSearchModeEnum}`;
-    usingReRank: boolean;
-    searchEmptyText: string;
-  };
-  cfr: {
-    background: string;
-  };
-  userGuide: {
-    welcomeText: string;
-    variables: {
-      id: string;
-      key: string;
-      label: string;
-      type: `${VariableInputEnum}`;
-      required: boolean;
-      maxLen: number;
-      enums: {
-        value: string;
-      }[];
-    }[];
-    questionGuide: boolean;
-    tts: {
-      type: 'none' | 'web' | 'model';
-      model?: string | undefined;
-      voice?: string | undefined;
-      speed?: number | undefined;
-    };
-  };
+export type AppEditFormType = {
+  tools: AppSchema['tools'];
+  // aiSettings: {
+  //   model: string;
+  //   systemPrompt?: string | undefined;
+  //   temperature: number;
+  //   maxToken: number;
+  //   isResponseAnswerText: boolean;
+  //   quoteTemplate?: string | undefined;
+  //   quotePrompt?: string | undefined;
+  // };
+  welcomeText: AppSchema['welcomeText'];
+  variables: AppSchema['variables'];
+  questionGuide: AppSchema['questionGuide'];
+  tts: AppSchema['tts'];
 };
 
 /* simple mode template*/
