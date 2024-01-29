@@ -1,5 +1,19 @@
-import React, { useCallback } from 'react';
-import { Box, Grid, Flex, IconButton, Button, useDisclosure } from '@chakra-ui/react';
+import React, { useCallback, useState, useEffect } from 'react';
+import {
+  Box,
+  Grid,
+  Card,
+  useTheme,
+  Flex,
+  IconButton,
+  Button,
+  useDisclosure,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { AddIcon } from '@chakra-ui/icons';
@@ -8,7 +22,6 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import { useTranslation } from 'next-i18next';
-
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import PageContainer from '@/components/PageContainer';
 import Avatar from '@/components/Avatar';
@@ -24,6 +37,8 @@ const MyApps = () => {
   const router = useRouter();
   const { userInfo } = useUserStore();
   const { myApps, loadMyApps } = useAppStore();
+  const [tabIndex, setTabIndex] = useState(0);
+  const [teamsTags, setTeamTags] = useState([]);
   const { openConfirm, ConfirmModal } = useConfirm({
     title: '删除提示',
     content: '确认删除该应用所有信息？'
@@ -65,11 +80,25 @@ const MyApps = () => {
         <Box letterSpacing={1} fontSize={['20px', '24px']} color={'myGray.900'}>
           {t('app.My Apps')}
         </Box>
-        {userInfo?.team?.canWrite && (
-          <Button leftIcon={<AddIcon />} variant={'primaryOutline'} onClick={onOpenCreateModal}>
-            {t('common.New Create')}
-          </Button>
-        )}
+        {/* <Tabs
+          variant="soft-rounded"
+          colorScheme="blue"
+          onChange={(index:number) => {
+            setTabIndex(index);
+          }}
+        >
+          <TabList>
+            <Tab>{t('app.My Apps')}</Tab>
+            <Tab>{t('app.Apps Share')}</Tab> 
+          </TabList>
+        </Tabs> */}
+        <Button
+          leftIcon={<AddIcon />}
+          variant={'primaryOutline'}
+          onClick={tabIndex === 0 ? onOpenCreateModal : onOpenShareAppModal}
+        >
+          {tabIndex === 0 ? t('common.New Create') : '新建分享'}
+        </Button>
       </Flex>
       <Grid
         py={[4, 6]}
@@ -171,6 +200,10 @@ const MyApps = () => {
           </MyTooltip>
         ))}
       </Grid>
+      {/* (
+        <ShareBox></ShareBox>
+      ) */}
+
       {myApps.length === 0 && (
         <Flex mt={'35vh'} flexDirection={'column'} alignItems={'center'}>
           <MyIcon name="empty" w={'48px'} h={'48px'} color={'transparent'} />
@@ -181,8 +214,29 @@ const MyApps = () => {
       )}
       <ConfirmModal />
       {isOpenCreateModal && (
-        <CreateModal onClose={onCloseCreateModal} onSuccess={() => loadMyApps(true)} />
+        <CreateModal
+          teamsTags={teamsTags}
+          onClose={onCloseCreateModal}
+          onSuccess={() => loadMyApps(true)}
+        />
       )}
+      {/* {isOpenShareModal && (
+        <ShareAppModal 
+          type='share'
+          onCreate={() => {
+          
+          }}
+          onEdit={() => {
+            toast({
+              status: 'success',
+              title: t('common.Update Successful')
+            });
+            refetchShareChatList();
+            setEditLinkData(undefined);
+          }}
+          onClose={onCloseShareModal} 
+          onSuccess={() => loadMyApps(true)} />
+      )} */}
     </PageContainer>
   );
 };

@@ -17,9 +17,16 @@ import type {
 import { UpdateChatFeedbackProps } from '@fastgpt/global/core/chat/api';
 
 /**
+ * 根据队伍ID和获取
+ */
+export const getChatListById = (data: { teamId: string, authToken: string, appId: string }) => GET(`/proApi/core/chat/init`, data);
+
+/**
  * 获取初始化聊天内容
  */
 export const getInitChatInfo = (data: InitChatProps) =>
+  GET<InitChatResponse>(`/core/chat/init`, data);
+export const getInitChatInfoTeam = (data: InitChatProps) =>
   GET<InitChatResponse>(`/core/chat/init`, data);
 export const getInitOutLinkChatInfo = (data: InitOutLinkChatProps) =>
   GET<InitChatResponse>(`/core/chat/outLink/init`, data);

@@ -8,8 +8,12 @@ import {
   Input,
   Grid,
   useTheme,
-  Card
+  Card,
+  Text,
+  HStack,
+  Tag
 } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import { useSelectFile } from '@/web/common/file/hooks/useSelectFile';
 import { useForm } from 'react-hook-form';
 import { compressImgFileAndUpload } from '@/web/common/file/controller';
@@ -32,7 +36,15 @@ type FormType = {
   templateId: string;
 };
 
-const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) => {
+const CreateModal = ({
+  teamsTags,
+  onClose,
+  onSuccess
+}: {
+  teamsTags: Array<any>;
+  onClose: () => void;
+  onSuccess: () => void;
+}) => {
   const { t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
   const { toast } = useToast();
@@ -130,6 +142,23 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
               required: t('core.app.error.App name can not be empty')
             })}
           />
+        </Flex>
+        <Flex mt={3} alignItems={'center'}>
+          <Text as="b">{t('common.Set Team Tags') + ':'}</Text>
+          {
+            <HStack spacing={2}>
+              {teamsTags.map((item, index) => {
+                return (
+                  <Tag key={index} size={'sm'} variant="outline" colorScheme="blue">
+                    {item.label}
+                  </Tag>
+                );
+              })}
+              <Button size="xs" rightIcon={<AddIcon />}>
+                {t('common.Set Team Tags')}
+              </Button>
+            </HStack>
+          }
         </Flex>
         {!feConfigs?.hide_app_flow && (
           <>

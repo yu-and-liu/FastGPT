@@ -11,6 +11,7 @@ const unAuthPage: { [key: string]: boolean } = {
   '/login/fastlogin': true,
   '/appStore': true,
   '/chat/share': true,
+  '/chat/team': true,
   '/tools/price': true,
   '/price': true
 };
@@ -27,6 +28,7 @@ const Auth = ({ children }: { children: JSX.Element }) => {
       if (unAuthPage[router.pathname] === true || userInfo) {
         return null;
       } else {
+        //return initUserInfo();
         return initUserInfo();
       }
     },
