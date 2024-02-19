@@ -143,23 +143,6 @@ const CreateModal = ({
             })}
           />
         </Flex>
-        <Flex mt={3} alignItems={'center'}>
-          <Text as="b">{t('common.Set Team Tags') + ':'}</Text>
-          {
-            <HStack spacing={2}>
-              {teamsTags.map((item, index) => {
-                return (
-                  <Tag key={index} size={'sm'} variant="outline" colorScheme="blue">
-                    {item.label}
-                  </Tag>
-                );
-              })}
-              <Button size="xs" rightIcon={<AddIcon />}>
-                {t('common.Set Team Tags')}
-              </Button>
-            </HStack>
-          }
-        </Flex>
         {!feConfigs?.hide_app_flow && (
           <>
             <Box mt={[4, 7]} mb={[0, 3]} color={'myGray.800'} fontWeight={'bold'}>
@@ -180,13 +163,13 @@ const CreateModal = ({
                   boxShadow={'sm'}
                   {...(getValues('templateId') === item.id
                     ? {
-                        bg: 'myWhite.600'
-                      }
+                      bg: 'myWhite.600'
+                    }
                     : {
-                        _hover: {
-                          boxShadow: 'md'
-                        }
-                      })}
+                      _hover: {
+                        boxShadow: 'md'
+                      }
+                    })}
                   onClick={() => {
                     setValue('templateId', item.id);
                     setRefresh((state) => !state);

@@ -206,6 +206,8 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       per: 'w'
     });
 
+
+
     // get and concat history
     const { history } = await getChatItems({
       appId: app._id,
