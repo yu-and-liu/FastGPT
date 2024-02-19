@@ -7,6 +7,7 @@ import {
 } from '@fastgpt/global/support/user/team/constant';
 import { MongoTeamMember } from './teamMemberSchema';
 import { MongoTeam } from './teamSchema';
+import { Console } from 'console';
 
 async function getTeamMember(match: Record<string, any>): Promise<TeamItemType> {
   const tmb = (await MongoTeamMember.findOne(match).populate('teamId')) as TeamMemberWithTeamSchema;
@@ -36,7 +37,7 @@ export async function getTmbInfoByTmbId({ tmbId }: { tmbId: string }) {
     return Promise.reject('tmbId or userId is required');
   }
   return getTeamMember({
-    _id: new Types.ObjectId(tmbId),
+    _id: new Types.ObjectId(String(tmbId)),
     status: notLeaveStatus
   });
 }

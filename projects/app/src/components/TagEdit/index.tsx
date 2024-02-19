@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import TagTextarea from '@/components/common/Textarea/TagTextarea';
 import {
   Menu,
   MenuButton,
@@ -11,14 +10,15 @@ import {
   Tag,
   Input
 } from '@chakra-ui/react';
+import type { TeamTagsSchema } from '@fastgpt/global/support/user/team/type';
 const TagEdit = ({
   defaultValues,
   teamsTags,
   setSelectedTags
 }: {
   defaultValues: [];
-  teamsTags: [];
-  setSelectedTags: (item: Array<String>) => void;
+  teamsTags: Array<TeamTagsSchema>;
+  setSelectedTags: (item: Array<string>) => void;
 }) => {
   const [teamTagsOptions, setTeamTagsOptions] = useState(teamsTags);
   const setSelectTeamsTags = (item: any) => {
@@ -43,8 +43,9 @@ const TagEdit = ({
             flexWrap: "wrap",
             minHeight: '40px'
           }}>
-            {teamsTags.map((item, index) => {
-              if (defaultValues.indexOf(item?.key) > -1) {
+            {teamsTags.map((item: any, index: number) => {
+              const key: any = item?.key;
+              if (defaultValues.indexOf(key) > -1) {
                 return (
                   <Tag
                     key={index}
@@ -64,16 +65,15 @@ const TagEdit = ({
         <MenuList style={{ height: "300px", overflow: "scroll" }}>
           <Input
             style={{ border: 'none', borderBottom: 'solid 1px #f6f6f6' }}
-            placeholder="输入搜索关键字"
-            onChange={(e) => {
-              console.log(e?.nativeEvent?.data);
+            placeholder="pleace "
+            onChange={(e: any) => {
               // 对用户输入的搜索文本进行小写转换，以实现不区分大小写的搜索
-              const searchLower = e?.nativeEvent?.data || '';
+              const searchLower: string = e?.nativeEvent?.data || '';
               // 使用filter方法来过滤列表，只返回包含搜索文本的项
               const resultList = teamsTags.filter((item) => {
-                item = item.label || '';
+                const searchValue = item.label || '';
                 // 对列表中的每一项也进行小写转换
-                return item.includes(searchLower);
+                return searchValue.includes(searchLower);
               });
               !searchLower ? setTeamTagsOptions(teamsTags) : setTeamTagsOptions(resultList);
             }}

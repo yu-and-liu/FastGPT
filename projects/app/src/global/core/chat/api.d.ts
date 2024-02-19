@@ -45,6 +45,7 @@ export type InitChatResponse = {
 /* ---------- history ----------- */
 export type getHistoriesProps = {
   appId?: string;
+  authToken?: string;
   // share chat
   shareId?: string;
   outLinkUid?: string; // authToken/uid

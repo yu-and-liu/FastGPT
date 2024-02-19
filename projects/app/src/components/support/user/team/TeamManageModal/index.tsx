@@ -103,7 +103,7 @@ const TeamManageModal = ({ onClose }: { onClose: () => void }) => {
       if (!userInfo?.team?.teamId) return [];
       // get team tags
       getTeamsTags(userInfo.team.teamId).then((res: any) => {
-        setTeamTags(res?.list);
+        setTeamTags(res);
       });
 
       return getTeamMembers(userInfo.team.teamId);

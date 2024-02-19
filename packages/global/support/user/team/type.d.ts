@@ -15,6 +15,10 @@ export type TeamSchema = {
     lastWebsiteSyncTime: Date;
   };
 };
+export type tagsSchema = {
+  label: string,
+  key: string
+}
 export type TeamTagsSchema = {
   _id: string;
   label: string;

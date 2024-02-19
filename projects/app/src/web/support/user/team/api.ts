@@ -8,6 +8,7 @@ import {
   UpdateTeamMemberProps,
   UpdateTeamProps
 } from '@fastgpt/global/support/user/team/controller.d';
+import type { TeamTagsSchema } from '@fastgpt/global/support/user/team/type';
 import {
   TeamItemType,
   TeamMemberItemType,
@@ -18,7 +19,7 @@ import {
 export const getTeamList = (status: `${TeamMemberSchema['status']}`) =>
   GET<TeamItemType[]>(`/proApi/support/user/team/list`, { status });
 export const updateTags = (teamId: string, tagsUrl: string) =>
-  POST(`/proApi/support/user/team/tags/asyncTags`, { teamId, tagsUrl });
+  POST<TeamTagsSchema[]>(`/proApi/support/user/team/tags/asyncTags`, { teamId, tagsUrl });
 export const postCreateTeam = (data: CreateTeamProps) =>
   POST<string>(`/proApi/support/user/team/create`, data);
 export const putUpdateTeam = (data: UpdateTeamProps) =>

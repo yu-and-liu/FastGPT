@@ -12,6 +12,7 @@ type State = {
   appDetail: AppDetailType;
   loadAppDetail: (id: string, init?: boolean) => Promise<AppDetailType>;
   updateAppDetail(appId: string, data: AppUpdateParams): Promise<void>;
+  replaceAppDetail(appId: string, data: AppUpdateParams): Promise<void>;
   clearAppModules(): void;
 };
 

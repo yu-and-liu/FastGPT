@@ -407,7 +407,7 @@
       "Stop Speak": "停止录音",
       "Type a message": "输入问题",
       "Unpin": "取消置顶",
-      "You need to a chat app": "你需要创建一个应用",
+      "You need to a chat app": "鉴权失败，暂无权限访问应用",
       "error": {
         "Chat error": "对话出现异常",
         "Messages empty": "接口内容为空，可能文本超长了~",

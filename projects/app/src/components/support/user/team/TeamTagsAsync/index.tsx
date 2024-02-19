@@ -9,8 +9,7 @@ import type { TeamTagsSchema } from '@fastgpt/global/support/user/team/type';
 import { useRequest } from '@/web/common/hooks/useRequest';
 import { RepeatIcon } from '@chakra-ui/icons';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { useToast } from '@/web/common/hooks/useToast';
-import { feConfigs } from '@/web/common/system/staticData';
+import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 
 const TeamTagsAsync = ({
@@ -24,13 +23,13 @@ const TeamTagsAsync = ({
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [_teamsTags, setTeamTags] = useState(teamsTags);
+  const [_teamsTags, setTeamTags] = useState<Array<TeamTagsSchema>>(teamsTags);
 
   const { register, setValue, getValues, handleSubmit } = useForm<any>({
     defaultValues: { ...teamInfo }
   });
   const { copyData } = useCopyData();
-  const baseUrl = feConfigs?.customSharePageDomain || location?.origin;
+  const baseUrl = global.feConfigs?.customSharePageDomain || location?.origin;
   const linkUrl = `${baseUrl}/chat/team?teamId=${teamInfo?._id}${getValues('showHistory') ? '' : '&showHistory=0'
     }`;
 
@@ -47,7 +46,7 @@ const TeamTagsAsync = ({
   });
   const asyncTags = async () => {
     console.log("getValues", getValues())
-    const res = await updateTags(teamInfo?._id, getValues().tagsUrl);
+    const res: Array<TeamTagsSchema> = (await updateTags(teamInfo?._id, getValues().tagsUrl));
     setTeamTags(res);
     toast({ status: 'success', title: '团队标签同步成功' });
   }
@@ -70,7 +69,7 @@ const TeamTagsAsync = ({
         overflow={'hidden'}
         title={
           <Box>
-            <Box>{teamInfo.name}</Box>
+            <Box>{teamInfo?.name}</Box>
             <Box color={'myGray.500'} fontSize={'xs'} fontWeight={'normal'}>
               {'填写标签同步链接，点击同步按钮即可同步'}
             </Box>

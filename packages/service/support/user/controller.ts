@@ -56,7 +56,6 @@ export async function getUserAndAuthBalance({
   minBalance?: number;
 }) {
   const user = await getUserDetail({ tmbId });
-
   if (!user) {
     return Promise.reject(UserErrEnum.unAuthUser);
   }

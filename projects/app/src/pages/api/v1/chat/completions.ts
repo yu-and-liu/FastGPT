@@ -15,6 +15,7 @@ import { saveChat } from '@/service/utils/chat/saveChat';
 import { responseWrite } from '@fastgpt/service/common/response';
 import { pushChatUsage } from '@/service/support/wallet/usage/push';
 import { authOutLinkChatStart } from '@/service/support/permission/auth/outLink';
+import { authTeamShareChatStart } from '@/service/support/permission/auth/teamChat';
 import { pushResult2Remote, updateOutLinkUsage } from '@fastgpt/service/support/outLink/tools';
 import requestIp from 'request-ip';
 import { getUsageSourceByAuthType } from '@fastgpt/global/support/wallet/usage/tools';
@@ -35,9 +36,14 @@ type FastGptShareChatProps = {
   shareId?: string;
   outLinkUid?: string;
 };
+type FastGptTeamShareChatProps = {
+  teamId?: string;
+  outLinkUid?: string;
+};
 export type Props = ChatCompletionCreateParams &
   FastGptWebChatProps &
-  FastGptShareChatProps & {
+  FastGptShareChatProps &
+  FastGptTeamShareChatProps & {
     messages: ChatMessageItemType[];
     stream?: boolean;
     detail?: boolean;
@@ -60,6 +66,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
   const {
     chatId,
     appId,
+    teamId,
     shareId,
     outLinkUid,
     stream = false,
@@ -111,6 +118,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
           return Promise.reject('app is empty');
         }
 
+
         return {
           user,
           app,
@@ -120,6 +128,28 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
           canWrite: false,
           uid
         };
+      }
+      // team Apps share
+      if (teamId && appId && outLinkUid) {
+        const { user, uid } = await authTeamShareChatStart({
+          teamId,
+          ip: originIp,
+          outLinkUid,
+          question: question.value
+        })
+        const app = await MongoApp.findById(appId);
+        if (!app) {
+          return Promise.reject('app is empty');
+        }
+        return {
+          user,
+          app,
+          responseDetail: detail,
+          authType: "outLink",
+          apikey: '',
+          canWrite: false,
+          uid
+        }
       }
 
       const {
@@ -194,6 +224,8 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       per: 'w'
     });
 
+
+
     // get and concat history
     const { history } = await getChatItems({
       appId: app._id,
@@ -201,6 +233,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       limit: 30,
       field: `dataId obj value`
     });
+
     const concatHistories = history.concat(chatMessages);
     const responseChatItemId: string | undefined = messages[messages.length - 1].dataId;
 
@@ -223,6 +256,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       stream,
       detail
     });
+    console.log("af")
 
     // save chat
     if (chatId) {

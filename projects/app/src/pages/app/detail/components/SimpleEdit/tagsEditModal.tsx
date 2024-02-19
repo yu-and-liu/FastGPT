@@ -3,11 +3,11 @@ import MyModal from '@/components/MyModal';
 import { useTranslation } from 'next-i18next';
 import { Button, Flex, Box, ModalFooter, ModalBody } from '@chakra-ui/react';
 import TagsEdit from '@/components/TagEdit';
-import { useToast } from '@/web/common/hooks/useToast';
+import { useToast } from '@fastgpt/web/hooks/useToast';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
+import { tagsSchema } from '@fastgpt/global/support/user/team/type';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { useRequest } from '@/web/common/hooks/useRequest';
-import { AddIcon } from '@chakra-ui/icons';
 import { getTeamsTags } from '@/web/support/user/team/api';
 const TagsEditModal = ({
   appDetail,
@@ -18,14 +18,14 @@ const TagsEditModal = ({
   onFinish: (value: string) => void;
 }) => {
   const { t } = useTranslation();
-  const [teamsTags, setTeamTags] = useState([]);
+  const [teamsTags, setTeamTags] = useState<Array<any>>([]);
   const [selectedTags, setSelectedTags] = useState(appDetail?.teamTags);
   const { toast } = useToast();
-  const { updateAppDetail, replaceAppDetail } = useAppStore();
+  const { replaceAppDetail } = useAppStore();
 
   // submit config
   const { mutate: saveSubmitSuccess, isLoading: btnLoading } = useRequest({
-    mutationFn: async (data: AppSchema) => {
+    mutationFn: async () => {
       await replaceAppDetail(appDetail._id, {
         teamTags: selectedTags
       });
@@ -55,13 +55,11 @@ const TagsEditModal = ({
   //     setSelectedTags(_selectedTags);
   //   }
   // }
-  const setInviteUsernames = () => { };
 
   useEffect(() => {
     // get team tags
-    getTeamsTags(appDetail?.teamId).then((res) => {
+    getTeamsTags(appDetail?.teamId).then((res: any) => {
       setTeamTags(res?.list);
-      console.log(res?.list)
     });
   }, []);
 
@@ -93,7 +91,7 @@ const TagsEditModal = ({
           <Button variant={'whiteBase'} mr={3} onClick={onClose}>
             {t('common.Close')}
           </Button>
-          <Button isLoading={btnLoading} onClick={() => saveSubmitSuccess()}>
+          <Button isLoading={btnLoading} onClick={(e) => saveSubmitSuccess(e)}>
             {t('common.Save')}
           </Button>
         </ModalFooter>

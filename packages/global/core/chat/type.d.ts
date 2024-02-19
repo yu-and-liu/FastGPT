@@ -25,6 +25,23 @@ export type ChatSchema = {
   metadata?: Record<string, any>;
 };
 
+export type teamInfoSchema = {
+  avatar: string;
+  balance: 296888
+  createTime: string;
+  maxSize: number;
+  name: string;
+  ownerId: string;
+  tagsUrl: string;
+  __v: number;
+  _id: string;
+}
+
+export type chatAppListSchema = {
+  apps: Array<any>,
+  teamInfo: teamInfoSchema
+}
+
 export type ChatWithAppSchema = Omit<ChatSchema, 'appId'> & {
   appId: AppSchema;
 };
