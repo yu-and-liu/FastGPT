@@ -100,8 +100,6 @@
     "Last use time": "Last use time",
     "Load Failed": "Load Failed",
     "Loading": "Loading",
-    "Max credit": "Credit",
-    "Max credit tips": "What is the maximum amount of money that can be consumed by the link? If the link is exceeded, it will be banned. -1 indicates no limit.",
     "More settings": "More settings",
     "Name": "Name",
     "Name Can": "Name Can't Be Empty",
@@ -614,7 +612,7 @@
         "Down load csv template": "Down load csv template",
         "Embedding Estimated Price Tips": "Index billing: {{price}}/1k chars",
         "Estimated Price": "Estimated Price: : {{amount}}{{unit}}",
-        "Estimated Price Tips": "QA charges\nInput: {{inputPrice}}/1k tokens\nOutput: {{outputPrice}}/1k tokens",
+        "Estimated Price Tips": "QA charges\nInput: 1k chars={{charsPointsPrice}} points",
         "Fetch Error": "Get link failed",
         "Fetch Url": "Url",
         "Fetch url placeholder": "Up to 10 links, one per line.",
@@ -1172,6 +1170,9 @@
       "Usage": "Usage"
     },
     "outlink": {
+      "Max usage points": "Max usage",
+      "Max usage points tip": "The maximum number of credits allowed for this link will not be used. -1 indicates no limit.",
+      "Usage points": "Usage points",
       "share": {
         "Response Quote": "Show Quote",
         "Response Quote tips": "The referenced content is returned in the share link, but the user is not allowed to download the original document."
@@ -1222,6 +1223,10 @@
           "refund": "REFUND",
           "success": "SUCCESS"
         }
+      },
+      "moduleName": {
+        "index": "Index Generation",
+        "qa": "QA Generation"
       },
       "noBill": "Not Bills",
       "subscription": {
@@ -1283,7 +1288,31 @@
         }
       },
       "usage": {
-        "Usage Detail": "Usage Detail"
+        "Ai model": "Ai Model",
+        "App name": "App name",
+        "Audio Speech": "Audio Speech",
+        "Bill Module": "Bill Detail",
+        "Chars length": "Chars length",
+        "Data Length": "Data length",
+        "Dataset store": "",
+        "Duration": "Duration(s)",
+        "Extension Input Token Length": "Extension input tokens",
+        "Extension Output Token Length": "Extension output tokens",
+        "Extension result": "Extension result",
+        "Input Token Length": "Input tokens",
+        "Module name": "Module name",
+        "Number": "Bill ID",
+        "Output Token Length": "Output tokens",
+        "ReRank": "ReRank",
+        "Source": "Source",
+        "Text Length": "Text length",
+        "Time": "Time",
+        "Token Length": "Tokens",
+        "Total": "Total",
+        "Total points": "AI points usage",
+        "Usage Detail": "Usage Detail",
+        "Whisper": "Whisper",
+        "bill username": "User"
       }
     }
   },
@@ -1400,38 +1429,6 @@
         "Update to Visitor": "Set to visitor",
         "Visitor": "Visitor"
       }
-    }
-  },
-  "wallet": {
-    "moduleName": {
-      "index": "Index Generation",
-      "qa": "QA Generation"
-    },
-    "usage": {
-      "Ai model": "Ai Model",
-      "App name": "App name",
-      "Audio Speech": "Audio Speech",
-      "Bill Module": "Bill Detail",
-      "Chars length": "Chars length",
-      "Data Length": "Data length",
-      "Dataset store": "",
-      "Duration": "Duration(s)",
-      "Extension Input Token Length": "Extension input tokens",
-      "Extension Output Token Length": "Extension output tokens",
-      "Extension result": "Extension result",
-      "Input Token Length": "Input tokens",
-      "Module name": "Module name",
-      "Next Step Guide": "",
-      "Number": "Bill ID",
-      "Output Token Length": "Output tokens",
-      "ReRank": "ReRank",
-      "Source": "Source",
-      "Text Length": "Text length",
-      "Time": "Time",
-      "Token Length": "Tokens",
-      "Total": "Total",
-      "Whisper": "Whisper",
-      "bill username": "User"
     }
   }
 }

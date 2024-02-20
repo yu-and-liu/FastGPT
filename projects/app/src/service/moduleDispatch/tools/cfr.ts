@@ -1,8 +1,11 @@
 import type { ChatItemType, moduleDispatchResType } from '@fastgpt/global/core/chat/type.d';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import type {
+  ModuleDispatchProps,
+  ModuleDispatchResponse
+} from '@fastgpt/global/core/module/type.d';
 import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
 import { ModelTypeEnum, getLLMModel } from '@/service/core/ai/model';
-import { formatModelPrice2Store } from '@/service/support/wallet/usage/utils';
+import { formatModelChars2Points } from '@/service/support/wallet/usage/utils';
 import { queryCfr } from '@fastgpt/service/core/ai/functions/cfr';
 import { getHistories } from '../utils';
 
@@ -12,10 +15,9 @@ type Props = ModuleDispatchProps<{
   [ModuleInputKeyEnum.history]?: ChatItemType[] | number;
   [ModuleInputKeyEnum.userChatInput]: string;
 }>;
-type Response = {
+type Response = ModuleDispatchResponse<{
   [ModuleOutputKeyEnum.text]: string;
-  [ModuleOutputKeyEnum.responseData]?: moduleDispatchResType;
-};
+}>;
 
 export const dispatchCFR = async ({
   histories,
@@ -36,29 +38,35 @@ export const dispatchCFR = async ({
   const cfrModel = getLLMModel(model);
   const chatHistories = getHistories(history, histories);
 
-  const { cfrQuery, inputTokens, outputTokens } = await queryCfr({
+  const { cfrQuery, charsLength } = await queryCfr({
     chatBg: systemPrompt,
     query: userChatInput,
     histories: chatHistories,
     model: cfrModel.model
   });
 
-  const { total, modelName } = formatModelPrice2Store({
+  const { totalPoints, modelName } = formatModelChars2Points({
     model: cfrModel.model,
-    inputLen: inputTokens,
-    outputLen: outputTokens,
-    type: ModelTypeEnum.llm
+    charsLength,
+    modelType: ModelTypeEnum.llm
   });
 
   return {
     [ModuleOutputKeyEnum.responseData]: {
-      price: total,
+      totalPoints,
       model: modelName,
-      inputTokens,
-      outputTokens,
+      charsLength,
       query: userChatInput,
       textOutput: cfrQuery
     },
+    [ModuleOutputKeyEnum.moduleDispatchBills]: [
+      {
+        moduleName: '问题补全',
+        totalPoints,
+        model: modelName,
+        charsLength
+      }
+    ],
     [ModuleOutputKeyEnum.text]: cfrQuery
   };
 };

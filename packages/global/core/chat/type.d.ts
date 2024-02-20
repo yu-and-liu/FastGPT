@@ -105,15 +105,15 @@ export type ChatHistoryItemType = HistoryItemType & {
 export type moduleDispatchResType = {
   // common
   moduleLogo?: string;
-  price?: number;
   runningTime?: number;
-  inputTokens?: number;
-  outputTokens?: number;
+  query?: string;
+  textOutput?: string;
+
+  // bill
   charsLength?: number;
   model?: string;
-  query?: string;
   contextTotalLen?: number;
-  textOutput?: string;
+  totalPoints?: number;
 
   // chat
   temperature?: number;
@@ -128,6 +128,7 @@ export type moduleDispatchResType = {
   searchUsingReRank?: boolean;
   extensionModel?: string;
   extensionResult?: string;
+  extensionCharsLength?: number;
 
   // cq
   cqList?: ClassifyQuestionAgentItemType[];

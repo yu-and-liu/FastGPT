@@ -8,10 +8,10 @@ import Tabs from '../Tabs';
 import MyModal from '../MyModal';
 import MyTooltip from '../MyTooltip';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
-import { formatStorePrice2Read } from '@fastgpt/global/support/wallet/usage/tools';
 import Markdown from '../Markdown';
 import { QuoteList } from './QuoteModal';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
+import { formatNumber } from '@fastgpt/global/common/math/tools';
 
 function Row({
   label,
@@ -39,8 +39,8 @@ function Row({
         {...(isCodeBlock
           ? { transform: 'translateY(-3px)' }
           : value
-          ? { px: 3, py: 1, border: theme.borders.base }
-          : {})}
+            ? { px: 3, py: 1, border: theme.borders.base }
+            : {})}
       >
         {value && <Markdown source={strValue} />}
         {rawDom}
@@ -131,10 +131,10 @@ const ResponseBox = React.memo(function ResponseBox({
       <Box py={2} px={4} flex={'1 0 0'} overflow={'auto'}>
         <>
           <Row label={t('core.chat.response.module name')} value={t(activeModule.moduleName)} />
-          {activeModule?.price !== undefined && (
+          {activeModule?.totalPoints !== undefined && (
             <Row
-              label={t('core.chat.response.module price')}
-              value={`￥${formatStorePrice2Read(activeModule?.price)}`}
+              label={t('support.wallet.usage.Total points')}
+              value={formatNumber(activeModule.totalPoints)}
             />
           )}
           <Row
@@ -142,11 +142,9 @@ const ResponseBox = React.memo(function ResponseBox({
             value={`${activeModule?.runningTime || 0}s`}
           />
           <Row label={t('core.chat.response.module model')} value={activeModule?.model} />
-          <Row label={t('wallet.bill.Chars length')} value={`${activeModule?.charsLength}`} />
-          <Row label={t('wallet.bill.Input Token Length')} value={`${activeModule?.inputTokens}`} />
           <Row
-            label={t('wallet.bill.Output Token Length')}
-            value={`${activeModule?.outputTokens}`}
+            label={t('support.wallet.usage.Chars length')}
+            value={`${activeModule?.charsLength}`}
           />
           <Row label={t('core.chat.response.module query')} value={activeModule?.query} />
           <Row
@@ -215,7 +213,7 @@ const ResponseBox = React.memo(function ResponseBox({
             value={activeModule?.extensionModel}
           />
           <Row
-            label={t('wallet.bill.Extension result')}
+            label={t('support.wallet.usage.Extension result')}
             value={`${activeModule?.extensionResult}`}
           />
         </>

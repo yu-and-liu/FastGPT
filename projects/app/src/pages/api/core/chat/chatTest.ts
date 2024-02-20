@@ -10,7 +10,7 @@ import type { ChatItemType } from '@fastgpt/global/core/chat/type';
 import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { dispatchModules } from '@/service/moduleDispatch';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
-import { getUserAndAuthBalance } from '@fastgpt/service/support/user/controller';
+import { getUserChatInfoAndAuthTeamPoints } from '@fastgpt/service/support/user/controller';
 
 export type Props = {
   history: ChatItemType[];
@@ -50,13 +50,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ]);
 
     // auth balance
-    const user = await getUserAndAuthBalance({
-      tmbId,
-      minBalance: 0
-    });
+    const user = await getUserChatInfoAndAuthTeamPoints(tmbId);
 
     /* start process */
-    const { responseData } = await dispatchModules({
+    const { responseData, moduleDispatchBills } = await dispatchModules({
       res,
       mode: 'test',
       teamId,
@@ -91,7 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       teamId,
       tmbId,
       source: UsageSourceEnum.fastgpt,
-      response: responseData
+      moduleDispatchBills
     });
   } catch (err: any) {
     res.status(500);

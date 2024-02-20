@@ -126,7 +126,10 @@ export const streamFetch = ({
             try {
               failedFinish(await res.clone().json());
             } catch {
-              failedFinish(await res.clone().text());
+              const errText = await res.clone().text();
+              if (!errText.startsWith('event: error')) {
+                failedFinish();
+              }
             }
           }
         },

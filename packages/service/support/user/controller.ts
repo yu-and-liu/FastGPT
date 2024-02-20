@@ -1,8 +1,10 @@
 import { UserType } from '@fastgpt/global/support/user/type';
 import { MongoUser } from './schema';
-import { getTmbInfoByTmbId, getUserDefaultTeam } from './team/controller';
+import { authTeamSurplusAiPoints, getTmbInfoByTmbId, getUserDefaultTeam } from './team/controller';
 import { ERROR_ENUM } from '@fastgpt/global/common/error/errorCode';
 import { UserErrEnum } from '@fastgpt/global/common/error/code/user';
+import { MongoTeamMember } from './team/teamMemberSchema';
+import { TeamMemberWithUserSchema } from '@fastgpt/global/support/user/team/type';
 
 export async function authUserExist({ userId, username }: { userId?: string; username?: string }) {
   if (userId) {
@@ -48,20 +50,16 @@ export async function getUserDetail({
   };
 }
 
-export async function getUserAndAuthBalance({
-  tmbId,
-  minBalance
-}: {
-  tmbId: string;
-  minBalance?: number;
-}) {
-  const user = await getUserDetail({ tmbId });
-  if (!user) {
-    return Promise.reject(UserErrEnum.unAuthUser);
-  }
-  if (minBalance !== undefined && user.team.balance < minBalance) {
-    return Promise.reject(UserErrEnum.balanceNotEnough);
-  }
+export async function getUserChatInfoAndAuthTeamPoints(tmbId: string) {
+  const tmb = (await MongoTeamMember.findById(tmbId, 'teamId userId').populate(
+    'userId',
+    'timezone openaiAccount'
+  )) as TeamMemberWithUserSchema;
+  if (!tmb) return Promise.reject(UserErrEnum.unAuthUser);
 
-  return user;
+  await authTeamSurplusAiPoints(tmb.teamId);
+
+  return {
+    user: tmb.userId
+  };
 }
