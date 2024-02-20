@@ -15,12 +15,7 @@ import { saveChat } from '@/service/utils/chat/saveChat';
 import { responseWrite } from '@fastgpt/service/common/response';
 import { pushChatUsage } from '@/service/support/wallet/usage/push';
 import { authOutLinkChatStart } from '@/service/support/permission/auth/outLink';
-<<<<<<< HEAD
-import { authTeamShareChatStart } from '@/service/support/permission/auth/teamChat';
-import { pushResult2Remote, updateOutLinkUsage } from '@fastgpt/service/support/outLink/tools';
-=======
 import { pushResult2Remote, addOutLinkUsage } from '@fastgpt/service/support/outLink/tools';
->>>>>>> upsteam/main
 import requestIp from 'request-ip';
 import { getUsageSourceByAuthType } from '@fastgpt/global/support/wallet/usage/tools';
 

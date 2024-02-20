@@ -1,6 +1,6 @@
 import { connectionMongo, type Model } from '../../../common/mongo';
 const { Schema, model, models } = connectionMongo;
-import { TeamTagsSchema as TeamTagsType } from '@fastgpt/global/support/user/team/type.d';
+import { TeamTagsSchema as TeamTagsSchemaType } from '@fastgpt/global/support/user/team/type.d';
 import {
   TeamCollectionName,
   TeamTagsCollectionName
@@ -13,16 +13,23 @@ const TeamTagsSchema = new Schema({
   },
   teamId: {
     type: Schema.Types.ObjectId,
-    ref: TeamCollectionName
+    ref: TeamCollectionName,
+    required: true
   },
   key: {
     type: String
   },
   createTime: {
     type: Date,
-    default: () => Date.now()
+    default: () => new Date()
   }
 });
 
-export const MongoTeamTags: Model<TeamTagsType> =
+try {
+  TeamTagsSchema.index({ teamId: 1 });
+} catch (error) {
+  console.log(error);
+}
+
+export const MongoTeamTags: Model<TeamTagsSchemaType> =
   models[TeamTagsCollectionName] || model(TeamTagsCollectionName, TeamTagsSchema);

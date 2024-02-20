@@ -63,7 +63,7 @@ const AppSchema = new Schema({
     default: PermissionTypeEnum.private
   },
   teamTags: {
-    type: Array
+    type: [String]
   }
 });
 

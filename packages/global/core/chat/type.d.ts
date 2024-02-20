@@ -25,15 +25,14 @@ export type ChatSchema = {
   metadata?: Record<string, any>;
 };
 
-export type teamInfoSchema = {
+export type teamInfoType = {
   avatar: string;
-  balance: 296888
+  balance: number;
   createTime: string;
   maxSize: number;
   name: string;
   ownerId: string;
   tagsUrl: string;
-  __v: number;
   _id: string;
 }
 
