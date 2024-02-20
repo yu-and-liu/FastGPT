@@ -31,11 +31,14 @@ export async function authTeamShareChatStart({
 
     // check balance and chat limit
     const user = await MongoTeamMember.findOne({ teamId, userId: String(res.ownerId) });
+    if (user) {
+        const userInfo = await getUserAndAuthBalance({ tmbId: user._id, minBalance: 0 });
 
-    const userInfo = await getUserAndAuthBalance({ tmbId: user._id, minBalance: 0 });
-
-    return {
-        user: userInfo,
-        uid: outLinkUid,
-    };
+        return {
+            user: userInfo,
+            uid: outLinkUid,
+        };
+    } else {
+        return null;
+    }
 }

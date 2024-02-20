@@ -131,25 +131,29 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       }
       // team Apps share
       if (teamId && appId && outLinkUid) {
-        const { user, uid } = await authTeamShareChatStart({
+        const result = await authTeamShareChatStart({
           teamId,
           ip: originIp,
           outLinkUid,
           question: question.value
         })
-        const app = await MongoApp.findById(appId);
-        if (!app) {
-          return Promise.reject('app is empty');
+        if (result && result.user) {
+          const { user, uid } = result;
+          const app = await MongoApp.findById(appId);
+          if (!app) {
+            return Promise.reject('app is empty');
+          }
+          return {
+            user,
+            app,
+            responseDetail: detail,
+            authType: AuthUserTypeEnum.outLink,
+            apikey: '',
+            canWrite: false,
+            uid
+          }
         }
-        return {
-          user,
-          app,
-          responseDetail: detail,
-          authType: "outLink",
-          apikey: '',
-          canWrite: false,
-          uid
-        }
+
       }
 
       const {
@@ -344,7 +348,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       appId: app._id,
       teamId: user.team.teamId,
       tmbId: user.team.tmbId,
-      source: getUsageSourceByAuthType({ shareId, authType }),
+      source: getUsageSourceByAuthType({ shareId, authType: authType as AuthUserTypeEnum }),
       response: responseData
     });
 
@@ -361,7 +365,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
         usage: total
       });
     }
-  } catch (err: any) {
+  } catch (err) {
     if (stream) {
       sseErrRes(res, err);
       res.end();

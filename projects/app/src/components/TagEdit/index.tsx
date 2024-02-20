@@ -43,9 +43,9 @@ const TagEdit = ({
             flexWrap: "wrap",
             minHeight: '40px'
           }}>
-            {teamsTags.map((item: any, index: number) => {
-              const key: any = item?.key;
-              if (defaultValues.indexOf(key) > -1) {
+            {teamsTags.map((item: TeamTagsSchema, index: number) => {
+              const key: string = item?.key;
+              if (defaultValues.indexOf(key as never) > -1) {
                 return (
                   <Tag
                     key={index}

@@ -95,9 +95,9 @@ const MyApps = () => {
         <Button
           leftIcon={<AddIcon />}
           variant={'primaryOutline'}
-          onClick={tabIndex === 0 ? onOpenCreateModal : onOpenShareAppModal}
+          onClick={onOpenCreateModal}
         >
-          {tabIndex === 0 ? t('common.New Create') : '新建分享'}
+          {t('common.New Create')}
         </Button>
       </Flex>
       <Grid

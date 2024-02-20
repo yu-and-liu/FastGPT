@@ -42,6 +42,9 @@ export const ChatSourceMap = {
   },
   [ChatSourceEnum.api]: {
     name: 'core.chat.logs.api'
+  },
+  [ChatSourceEnum.team]: {
+    name: 'core.chat.logs.team'
   }
 };
 

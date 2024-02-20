@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
-import { TableContainer, Table, Thead, Tr, Th, Td, Link, Button } from '@chakra-ui/react';
+import { TableContainer, Table, Thead, Tr, Th, Td, Tbody, Button } from '@chakra-ui/react';
 import { useUserStore } from '@/web/support/user/useUserStore';
 const ShareBox = (teamTags: Array<any>) => {
   const { userInfo, initUserInfo } = useUserStore();

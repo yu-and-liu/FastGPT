@@ -15,7 +15,6 @@ const TagsEditModal = ({
 }: {
   appDetail?: any;
   onClose: () => void;
-  onFinish: (value: string) => void;
 }) => {
   const { t } = useTranslation();
   const [teamsTags, setTeamTags] = useState<Array<any>>([]);

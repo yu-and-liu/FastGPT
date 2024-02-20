@@ -104,7 +104,7 @@ const OutLink = ({
       }
       //
       return null;
-    } catch (error: { message: string }) {
+    } catch (error: any) {
       toast({
         status: 'warning',
         title: error?.message
