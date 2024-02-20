@@ -5,8 +5,7 @@
     "qaMaxProcess": 15,
     "pgHNSWEfSearch": 100
   },
-  "license": "GTBZf5pm57AQqdCHHm6ROAlThK3X0x8MJN47Xgjy3FnfR0XF4Vvt/88H68DyWowlsTI0VO+qBxbAcWD6ow7JRJ8NrdWgf8JPnHCisifZU5fGi2s/H39jF9Z4V5RAn0T4T668J/hFPElRowDU4lt1DE2sW0g5z00vXppM9f43sTub3AYwMlTU3WVDTtNBumK64qVicjawZkjbc/lNAOTlKZB0ao505DT0O956ht+DeUjy50rUQPMPs8fWtWZTkbQB31nRZof7lHIO15BJ1Wr2Q/2fUiPf0yD6N6MMLsAfXjc+k1p9O52rcDu73rS9RLGstli9DZN8S76fwkgTnkxVO71pn/LYTxge+6l8jx9Jlz2yd5NXjSxIIWZVWg3d42ozGkaLk/N3QZ8YTlsxX7zrQYOcIueBlSvrR/Mb/yz2x187Vkodk1P/sRlF+6PKB5zYFipvPtzpNe1EYS5TJBrgOSPmMgeSW0tMgiG1JVmEE1jY3/rYEyQDI2t1vF+HITacblXK8cSXe/veE4jFpdYA4aUJ+z77MvAnNJlOdZ8eYaX2r49z6R3sVfQzvmVm/9hw166gQkk171GD+t81FazSYM/urJoa1/KNNORPYmCa2yc1gbOhyS5gy9W4T8K4x3UlAtLBPqdx+Siq24MY8zD4satRrfLQZ4JrjiVMcc7a7M4=",
-  "chatModels": [
+  "llmModels": [
     {
       "model": "gpt-3.5-turbo-1106",
       "name": "gpt-3.5-turbo",
