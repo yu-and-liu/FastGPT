@@ -50,7 +50,6 @@ const TagTextarea = ({ defaultValues, onUpdate, ...props }: Props) => {
       p={2}
       fontSize={'sm'}
       bg={'myWhite.600'}
-      {...props?.sty}
       {...(focus && {
         boxShadow: '0px 0px 4px #A8DBFF',
         borderColor: 'primary.500'

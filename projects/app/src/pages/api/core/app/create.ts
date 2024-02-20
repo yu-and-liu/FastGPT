@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       name = 'APP',
       avatar,
       type = AppTypeEnum.advanced,
-      teamTags,
       modules
     } = req.body as CreateAppParams;
 
@@ -37,7 +36,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       tmbId,
       modules,
       type,
-      teamTags,
       simpleTemplateId: SimpleModeTemplate_FastGPT_Universal.id
     });
 
