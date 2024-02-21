@@ -26,9 +26,9 @@ export const jsonRes = <T = any>(
   // Specified error
   if (ERROR_RESPONSE[errResponseKey]) {
     // login is expired
-    // if (errResponseKey === ERROR_ENUM.unAuthorization) {
-    //   clearCookie(res);
-    // }
+    if (errResponseKey === ERROR_ENUM.unAuthorization) {
+      clearCookie(res);
+    }
 
     return res.json(ERROR_RESPONSE[errResponseKey]);
   }
