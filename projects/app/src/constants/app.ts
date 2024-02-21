@@ -16,7 +16,7 @@ export const defaultApp: AppDetailType = {
   permission: 'private',
   isOwner: false,
   canWrite: false,
-  teamTags: []
+  teamTags: ['']
 }
 
 export const defaultOutLinkForm: OutLinkEditType = {
@@ -24,7 +24,7 @@ export const defaultOutLinkForm: OutLinkEditType = {
   responseDetail: false,
   limit: {
     QPM: 100,
-    credit: -1
+    maxUsagePoints: -1
   }
 };
 

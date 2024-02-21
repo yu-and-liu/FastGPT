@@ -37,11 +37,9 @@ type FormType = {
 };
 
 const CreateModal = ({
-  teamsTags,
   onClose,
   onSuccess
 }: {
-  teamsTags: Array<any>;
   onClose: () => void;
   onSuccess: () => void;
 }) => {

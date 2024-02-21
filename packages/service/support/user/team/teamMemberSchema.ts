@@ -36,10 +36,6 @@ const TeamMemberSchema = new Schema({
     type: Date,
     default: () => new Date()
   },
-  // teamTags: {
-  //   type: [String],
-  //   default: []
-  // },
   defaultTeam: {
     type: Boolean,
     default: false

@@ -30,7 +30,7 @@ const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 12);
 import ChatBox, { type ComponentRef, type StartChatFnProps } from '@/components/ChatBox';
 import { streamFetch } from '@/web/common/api/fetch';
 import { useTeamShareChatStore } from '@/web/core/chat/storeTeamChat';
-import type { ChatHistoryItemType, chatAppListSchema, teamInfoSchema } from '@fastgpt/global/core/chat/type.d';
+import type { ChatHistoryItemType, chatAppListSchema, teamInfoType } from '@fastgpt/global/core/chat/type.d';
 import { chatContentReplaceBlock } from '@fastgpt/global/core/chat/utils';
 import { ChatStatusEnum } from '@fastgpt/global/core/chat/constants';
 import { POST } from '@/web/common/api/request';
@@ -52,7 +52,7 @@ const OutLink = ({
   const [myApps, setMyApps] = useState<Array<any>>([]);
   const { isPc } = useSystemStore();
   const ChatBoxRef = useRef<ComponentRef>(null);
-  const [teamInfo, setTeamInfo] = useState<teamInfoSchema>();
+  const [teamInfo, setTeamInfo] = useState<teamInfoType>();
   const { Loading, setIsLoading } = useLoading();
   const forbidRefresh = useRef(false);
 

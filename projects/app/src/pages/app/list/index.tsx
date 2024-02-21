@@ -2,17 +2,10 @@ import React, { useCallback, useState, useEffect } from 'react';
 import {
   Box,
   Grid,
-  Card,
-  useTheme,
   Flex,
   IconButton,
   Button,
   useDisclosure,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
@@ -37,7 +30,6 @@ const MyApps = () => {
   const router = useRouter();
   const { userInfo } = useUserStore();
   const { myApps, loadMyApps } = useAppStore();
-  const [tabIndex, setTabIndex] = useState(0);
   const [teamsTags, setTeamTags] = useState([]);
   const { openConfirm, ConfirmModal } = useConfirm({
     title: '删除提示',
@@ -80,18 +72,6 @@ const MyApps = () => {
         <Box letterSpacing={1} fontSize={['20px', '24px']} color={'myGray.900'}>
           {t('app.My Apps')}
         </Box>
-        {/* <Tabs
-          variant="soft-rounded"
-          colorScheme="blue"
-          onChange={(index:number) => {
-            setTabIndex(index);
-          }}
-        >
-          <TabList>
-            <Tab>{t('app.My Apps')}</Tab>
-            <Tab>{t('app.Apps Share')}</Tab> 
-          </TabList>
-        </Tabs> */}
         <Button
           leftIcon={<AddIcon />}
           variant={'primaryOutline'}
@@ -215,28 +195,10 @@ const MyApps = () => {
       <ConfirmModal />
       {isOpenCreateModal && (
         <CreateModal
-          teamsTags={teamsTags}
           onClose={onCloseCreateModal}
           onSuccess={() => loadMyApps(true)}
         />
       )}
-      {/* {isOpenShareModal && (
-        <ShareAppModal 
-          type='share'
-          onCreate={() => {
-          
-          }}
-          onEdit={() => {
-            toast({
-              status: 'success',
-              title: t('common.Update Successful')
-            });
-            refetchShareChatList();
-            setEditLinkData(undefined);
-          }}
-          onClose={onCloseShareModal} 
-          onSuccess={() => loadMyApps(true)} />
-      )} */}
     </PageContainer>
   );
 };

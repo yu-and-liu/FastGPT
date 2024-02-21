@@ -5,7 +5,7 @@ import type {
     AuthOutLinkInitProps,
     AuthOutLinkResponse
 } from '@fastgpt/global/support/outLink/api.d';
-import { getUserAndAuthBalance } from '@fastgpt/service/support/user/controller';
+import { getUserChatInfoAndAuthTeamPoints } from '@fastgpt/service/support/user/controller';
 import { MongoTeam } from '@fastgpt/service/support/user/team/teamSchema';
 import { MongoTeamMember } from "@fastgpt/service/support/user/team/teamMemberSchema"
 export function authOutLinkInit(data: AuthOutLinkInitProps): Promise<AuthOutLinkResponse> {
@@ -30,15 +30,17 @@ export async function authTeamShareChatStart({
 
 
     // check balance and chat limit
-    const user = await MongoTeamMember.findOne({ teamId, userId: String(res.ownerId) });
-    if (user) {
-        const userInfo = await getUserAndAuthBalance({ tmbId: user._id, minBalance: 0 });
+    const tmb = await MongoTeamMember.findOne({ teamId, userId: String(res.ownerId) });
 
-        return {
-            user: userInfo,
-            uid: outLinkUid,
-        };
-    } else {
-        return null;
+    if (!tmb) {
+        throw new Error("can not find it")
     }
+
+    const userInfo = await getUserChatInfoAndAuthTeamPoints(String(tmb._id));
+
+    return {
+        user: userInfo,
+        uid: outLinkUid,
+    };
+
 }

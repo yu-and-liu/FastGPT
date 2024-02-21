@@ -4,6 +4,7 @@ import { ChatRoleEnum, ChatSourceEnum, ChatStatusEnum } from './constants';
 import { FlowNodeTypeEnum } from '../module/node/constant';
 import { ModuleOutputKeyEnum } from '../module/constants';
 import { AppSchema } from '../app/type';
+import type { AppSchema as AppType } from '@fastgpt/global/core/app/type.d';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 
 export type ChatSchema = {
@@ -37,7 +38,7 @@ export type teamInfoType = {
 }
 
 export type chatAppListSchema = {
-  apps: Array<any>,
+  apps: Array<AppType>,
   teamInfo: teamInfoSchema
 }
 

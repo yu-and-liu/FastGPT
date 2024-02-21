@@ -20,7 +20,7 @@ export interface AppSchema {
   modules: ModuleItemType[];
   permission: `${PermissionTypeEnum}`;
   inited?: boolean;
-  teamTags: Array<String>;
+  teamTags: [string];
 }
 
 export type AppListItemType = {
