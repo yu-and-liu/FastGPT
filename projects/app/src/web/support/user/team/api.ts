@@ -18,20 +18,19 @@ import {
 /* --------------- team  ---------------- */
 export const getTeamList = (status: `${TeamMemberSchema['status']}`) =>
   GET<TeamItemType[]>(`/proApi/support/user/team/list`, { status });
-export const updateTags = (teamId: string, tagsUrl: string) =>
-  POST<TeamTagsSchema[]>(`/proApi/support/user/team/tags/asyncTags`, { teamId, tagsUrl });
 export const postCreateTeam = (data: CreateTeamProps) =>
   POST<string>(`/proApi/support/user/team/create`, data);
 export const putUpdateTeam = (data: UpdateTeamProps) =>
   PUT(`/proApi/support/user/team/update`, data);
-export const putUpdateTeamTags = (data: any) =>
-  PUT(`/proApi/support/user/team/tags/updateUrl`, data);
+
 export const putSwitchTeam = (teamId: string) =>
   PUT<string>(`/proApi/support/user/team/switch`, { teamId });
-
+export const updateTags = (teamId: string, tagsUrl: string) =>
+  POST<TeamTagsSchema[]>(`/proApi/support/user/team/tags/asyncTags`, { teamId, tagsUrl });
 export const getTeamsTags = (teamId: string) =>
   GET(`/proApi/support/user/team/tags/list`, { teamId });
-
+export const putUpdateTeamTags = (data: any) =>
+  PUT(`/proApi/support/user/team/tags/updateUrl`, data);
 export const insertTeamsTags = (tags: Array<any>) =>
   POST(`/proApi/support/user/team/tags/create`, tags);
 

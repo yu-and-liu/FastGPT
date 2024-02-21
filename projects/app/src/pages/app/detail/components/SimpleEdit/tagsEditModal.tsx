@@ -5,7 +5,7 @@ import { Button, Flex, Box, ModalFooter, ModalBody } from '@chakra-ui/react';
 import TagsEdit from '@/components/TagEdit';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { AppSchema } from '@fastgpt/global/core/app/type.d';
-import { tagsSchema } from '@fastgpt/global/support/user/team/type';
+import { TeamTagsSchema } from '@fastgpt/global/support/user/team/type';
 import { useAppStore } from '@/web/core/app/store/useAppStore';
 import { useRequest } from '@/web/common/hooks/useRequest';
 import { getTeamsTags } from '@/web/support/user/team/api';
@@ -17,7 +17,7 @@ const TagsEditModal = ({
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
-  const [teamsTags, setTeamTags] = useState<Array<any>>([]);
+  const [teamsTags, setTeamTags] = useState<Array<TeamTagsSchema>>([]);
   const [selectedTags, setSelectedTags] = useState(appDetail?.teamTags);
   const { toast } = useToast();
   const { replaceAppDetail } = useAppStore();

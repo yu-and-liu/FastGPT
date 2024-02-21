@@ -28,6 +28,5 @@
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.6.0"
-  },
-  "repository": "https://github.com/c121914yu/FastGPT.git"
+  }
 }
