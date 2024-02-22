@@ -8,7 +8,7 @@ import { useConfirm } from '@/web/common/hooks/useConfirm';
 import PageContainer from '@/components/PageContainer';
 import SideTabs from '@/components/SideTabs';
 import Tabs from '@/components/Tabs';
-import UserInfo from './components/Info';
+import UserInfo from './components/InforNew';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import { useTranslation } from 'next-i18next';
 import Script from 'next/script';
@@ -44,58 +44,58 @@ const Account = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
     },
     ...(feConfigs?.isPlus
       ? [
-          {
-            icon: 'support/usage/usageRecordLight',
-            label: t('user.Usage Record'),
-            id: TabEnum.usage
-          }
-        ]
+        {
+          icon: 'support/usage/usageRecordLight',
+          label: t('user.Usage Record'),
+          id: TabEnum.usage
+        }
+      ]
       : []),
     ...(feConfigs?.show_pay && userInfo?.team.canWrite
       ? [
-          {
-            icon: 'support/bill/payRecordLight',
-            label: t('support.wallet.Bills'),
-            id: TabEnum.bill
-          }
-        ]
+        {
+          icon: 'support/bill/payRecordLight',
+          label: t('support.wallet.Bills'),
+          id: TabEnum.bill
+        }
+      ]
       : []),
     ...(feConfigs?.show_pay
       ? [
-          {
-            icon: 'support/bill/priceLight',
-            label: t('support.user.Price'),
-            id: TabEnum.price
-          }
-        ]
+        {
+          icon: 'support/bill/priceLight',
+          label: t('support.user.Price'),
+          id: TabEnum.price
+        }
+      ]
       : []),
 
     ...(feConfigs?.show_promotion
       ? [
-          {
-            icon: 'support/account/promotionLight',
-            label: t('user.Promotion Record'),
-            id: TabEnum.promotion
-          }
-        ]
+        {
+          icon: 'support/account/promotionLight',
+          label: t('user.Promotion Record'),
+          id: TabEnum.promotion
+        }
+      ]
       : []),
     ...(userInfo?.team.canWrite
       ? [
-          {
-            icon: 'support/outlink/apikeyLight',
-            label: t('user.apikey.key'),
-            id: TabEnum.apikey
-          }
-        ]
+        {
+          icon: 'support/outlink/apikeyLight',
+          label: t('user.apikey.key'),
+          id: TabEnum.apikey
+        }
+      ]
       : []),
     ...(feConfigs.isPlus
       ? [
-          {
-            icon: 'support/user/informLight',
-            label: t('user.Notice'),
-            id: TabEnum.inform
-          }
-        ]
+        {
+          icon: 'support/user/informLight',
+          label: t('user.Notice'),
+          id: TabEnum.inform
+        }
+      ]
       : []),
 
     {
