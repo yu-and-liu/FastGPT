@@ -19,6 +19,31 @@ export type UserModelSchema = {
     baseUrl: string;
   };
 };
+export enum UserStandardEnum {
+  free = 'free',
+  trial = 'trial',
+  team = 'team',
+  enterprise = 'enterprise'
+}
+
+export type standardInfoType = {
+  datasetMaxSize: number,
+  expiredTime: string,
+  currentSubLevel: `${UserStandardEnum}`,
+  totalPoints: number,
+  currentMode: string,
+  pointPrice: number,
+  price: number,
+  status: string,
+  surplusPoints: number,
+  totalPoints: number,
+  type: string,
+  standardMaxDatasetSize: number,
+  standardMaxPoints: number,
+  totalPoints: number,
+  usedDatasetSize: number,
+  usedPoints: number,
+}
 
 export type UserType = {
   _id: string;
@@ -29,5 +54,9 @@ export type UserType = {
   promotionRate: UserModelSchema['promotionRate'];
   openaiAccount: UserModelSchema['openaiAccount'];
   team: TeamItemType;
+<<<<<<< HEAD
   standardInfo?: standardInfoType;
+=======
+  standardInfo?: standardInfoType
+>>>>>>> 664f4edb (feat 修改个人账号页)
 };
