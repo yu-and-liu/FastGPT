@@ -30,9 +30,9 @@ import {
 import { formatTimeToChatTime } from '@/utils/tools';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useForm } from 'react-hook-form';
-import { defaultOutLinkForm } from '@/constants/app';
-import type { OutLinkEditType, OutLinkSchema } from '@fastgpt/global/support/outLink/type.d';
-import { useRequest } from '@fastgpt/web/hooks/useRequest';
+import { defaultOutLinkForm, defaultWecomOutLinkForm } from '@/constants/app';
+import type { OutLinkEditType, OutLinkConfigEditType, OutLinkSchema } from '@fastgpt/global/support/outLink/type.d';
+import { useRequest } from '@/web/common/hooks/useRequest';
 import { OutLinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
 import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
@@ -46,13 +46,15 @@ import MyMenu from '@/components/MyMenu';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 
 const SelectUsingWayModal = dynamic(() => import('./SelectUsingWayModal'));
+const WecomEditModal = dynamic(() => import('./WecomEditModal'));
 
-const Share = ({ appId }: { appId: string }) => {
+const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: OutLinkSchema['type'] }) => {
   const { t } = useTranslation();
   const { Loading, setIsLoading } = useLoading();
   const { feConfigs } = useSystemStore();
   const { copyData } = useCopyData();
   const [editLinkData, setEditLinkData] = useState<OutLinkEditType>();
+  const [editWecomLinkData, setEditWecomLinkData] = useState<OutLinkConfigEditType>();
   const [selectedLinkData, setSelectedLinkData] = useState<OutLinkSchema>();
   const { toast } = useToast();
   const { ConfirmModal, openConfirm } = useConfirm({
@@ -64,14 +66,14 @@ const Share = ({ appId }: { appId: string }) => {
     isFetching,
     data: shareChatList = [],
     refetch: refetchShareChatList
-  } = useQuery(['initShareChatList', appId], () => getShareChatList(appId));
+  } = useQuery(['initShareChatList', appId, type], () => getShareChatList({ appId, type }));
 
   return (
     <Box position={'relative'} pt={3} px={5} minH={'50vh'}>
       <Flex justifyContent={'space-between'}>
         <Box fontWeight={'bold'} fontSize={['md', 'xl']}>
-          {t('core.app.Share link')}
-          <MyTooltip forceShow label={t('core.app.Share link desc detail')}>
+          {t(type == "share" ? 'core.app.Share link' : 'core.app.Wecom link')}
+          <MyTooltip forceShow label={t(type == "share" ? 'core.app.Share link desc detail' : 'core.app.core.app.Wecom Link Dec')}>
             <QuestionOutlineIcon ml={1} />
           </MyTooltip>
         </Box>
@@ -81,11 +83,11 @@ const Share = ({ appId }: { appId: string }) => {
           size={['sm', 'md']}
           {...(shareChatList.length >= 10
             ? {
-                isDisabled: true,
-                title: t('core.app.share.Amount limit tip')
-              }
+              isDisabled: true,
+              title: t('core.app.share.Amount limit tip')
+            }
             : {})}
-          onClick={() => setEditLinkData(defaultOutLinkForm)}
+          onClick={() => type === "share" ? setEditLinkData(defaultOutLinkForm) : setEditWecomLinkData(defaultWecomOutLinkForm)}
         >
           {t('core.app.share.Create link')}
         </Button>
@@ -105,6 +107,7 @@ const Share = ({ appId }: { appId: string }) => {
                 </>
               )}
               <Th>{t('common.Last use time')}</Th>
+              {type === "wecom" ? (<Th>{t('core.app.App params config')}</Th>) : null}
               <Th></Th>
             </Tr>
           </Thead>
@@ -115,11 +118,10 @@ const Share = ({ appId }: { appId: string }) => {
                 <Td>
                   {Math.round(item.usagePoints)}
                   {feConfigs?.isPlus
-                    ? `${
-                        item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
-                          ? ` / ${item.limit.maxUsagePoints}`
-                          : ` / ${t('common.Unlimited')}`
-                      }`
+                    ? `${item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
+                      ? ` / ${item.limit.maxUsagePoints}`
+                      : ` / ${t('common.Unlimited')}`
+                    }`
                     : ''}
                 </Td>
                 <Td>{item.responseDetail ? '✔' : '✖'}</Td>
@@ -159,11 +161,16 @@ const Share = ({ appId }: { appId: string }) => {
                         label: t('common.Edit'),
                         icon: 'edit',
                         onClick: () =>
-                          setEditLinkData({
+                          type === "share" ? setEditLinkData({
                             _id: item._id,
                             name: item.name,
                             responseDetail: item.responseDetail,
                             limit: item.limit
+                          }) : setEditWecomLinkData({
+                            _id: item._id,
+                            name: item.name,
+                            limit: item.limit,
+                            wecomConfig: item.wecomConfig
                           })
                       },
                       {
@@ -220,6 +227,29 @@ const Share = ({ appId }: { appId: string }) => {
           onClose={() => setEditLinkData(undefined)}
         />
       )}
+      {
+        (!!editWecomLinkData &&
+          <WecomEditModal
+            appId={appId}
+            type={'wecom'}
+            defaultData={editWecomLinkData}
+            onCreate={(id) => {
+              const url = `${location.origin}/chat/share?shareId=${id}`;
+              copyData(url, t('core.app.share.Create link tip'));
+              refetchShareChatList();
+              setEditWecomLinkData(undefined);
+            }}
+            onEdit={() => {
+              toast({
+                status: 'success',
+                title: t('common.Update Successful')
+              });
+              refetchShareChatList();
+              setEditWecomLinkData(undefined);
+            }}
+            onClose={() => setEditWecomLinkData(undefined)}
+          />)
+      }
       {!!selectedLinkData && (
         <SelectUsingWayModal
           share={selectedLinkData}
