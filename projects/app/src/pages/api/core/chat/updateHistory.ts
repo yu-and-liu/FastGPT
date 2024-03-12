@@ -11,12 +11,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await connectToDatabase();
     const { appId, chatId, teamId, shareId, outLinkUid, customTitle, top } =
       req.body as UpdateHistoryProps;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c9b87787 (fix team share redirect to login)
     await autChatCrud({
       req,
       authToken: true,
       appId,
       teamId,
       chatId,
+      teamId,
       shareId,
       outLinkUid,
       per: 'w'
