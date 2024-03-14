@@ -31,7 +31,11 @@ import { formatTimeToChatTime } from '@/utils/tools';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 import { useForm } from 'react-hook-form';
 import { defaultOutLinkForm, defaultWecomOutLinkForm } from '@/constants/app';
-import type { OutLinkEditType, OutLinkConfigEditType, OutLinkSchema } from '@fastgpt/global/support/outLink/type.d';
+import type {
+  OutLinkEditType,
+  OutLinkConfigEditType,
+  OutLinkSchema
+} from '@fastgpt/global/support/outLink/type.d';
 import { useRequest } from '@/web/common/hooks/useRequest';
 import { OutLinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
 import { useTranslation } from 'next-i18next';
@@ -43,12 +47,22 @@ import dayjs from 'dayjs';
 import { getDocPath } from '@/web/common/system/doc';
 import dynamic from 'next/dynamic';
 import MyMenu from '@/components/MyMenu';
+<<<<<<< HEAD
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
+=======
+import type { OutLinkConfigSchema } from '@fastgpt/global/support/outLinkConfig/type.d';
+>>>>>>> 1a93bfb7 (feat 新增飞书添加链接)
 
 const SelectUsingWayModal = dynamic(() => import('./SelectUsingWayModal'));
 const WecomEditModal = dynamic(() => import('./WecomEditModal'));
 
-const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: OutLinkSchema['type'] }) => {
+const Share = ({
+  appId,
+  type = OutLinkTypeEnum.share
+}: {
+  appId: string;
+  type: OutLinkSchema['type'];
+}) => {
   const { t } = useTranslation();
   const { Loading, setIsLoading } = useLoading();
   const { feConfigs } = useSystemStore();
@@ -72,8 +86,15 @@ const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: O
     <Box position={'relative'} pt={3} px={5} minH={'50vh'}>
       <Flex justifyContent={'space-between'}>
         <Box fontWeight={'bold'} fontSize={['md', 'xl']}>
-          {t(type == "share" ? 'core.app.Share link' : 'core.app.Wecom link')}
-          <MyTooltip forceShow label={t(type == "share" ? 'core.app.Share link desc detail' : 'core.app.core.app.Wecom Link Dec')}>
+          {t(type == 'share' ? 'core.app.Share link' : 'core.app.Wecom link')}
+          <MyTooltip
+            forceShow
+            label={t(
+              type == 'share'
+                ? 'core.app.Share link desc detail'
+                : 'core.app.core.app.Wecom Link Dec'
+            )}
+          >
             <QuestionOutlineIcon ml={1} />
           </MyTooltip>
         </Box>
@@ -83,11 +104,15 @@ const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: O
           size={['sm', 'md']}
           {...(shareChatList.length >= 10
             ? {
-              isDisabled: true,
-              title: t('core.app.share.Amount limit tip')
-            }
+                isDisabled: true,
+                title: t('core.app.share.Amount limit tip')
+              }
             : {})}
-          onClick={() => type === "share" ? setEditLinkData(defaultOutLinkForm) : setEditWecomLinkData(defaultWecomOutLinkForm)}
+          onClick={() =>
+            type === 'share'
+              ? setEditLinkData(defaultOutLinkForm)
+              : setEditWecomLinkData(defaultWecomOutLinkForm)
+          }
         >
           {t('core.app.share.Create link')}
         </Button>
@@ -107,7 +132,7 @@ const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: O
                 </>
               )}
               <Th>{t('common.Last use time')}</Th>
-              {type === "wecom" ? (<Th>{t('core.app.App params config')}</Th>) : null}
+              {type === 'wecom' ? <Th>{t('core.app.App params config')}</Th> : null}
               <Th></Th>
             </Tr>
           </Thead>
@@ -118,10 +143,11 @@ const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: O
                 <Td>
                   {Math.round(item.usagePoints)}
                   {feConfigs?.isPlus
-                    ? `${item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
-                      ? ` / ${item.limit.maxUsagePoints}`
-                      : ` / ${t('common.Unlimited')}`
-                    }`
+                    ? `${
+                        item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
+                          ? ` / ${item.limit.maxUsagePoints}`
+                          : ` / ${t('common.Unlimited')}`
+                      }`
                     : ''}
                 </Td>
                 <Td>{item.responseDetail ? '✔' : '✖'}</Td>
@@ -161,17 +187,19 @@ const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: O
                         label: t('common.Edit'),
                         icon: 'edit',
                         onClick: () =>
-                          type === "share" ? setEditLinkData({
-                            _id: item._id,
-                            name: item.name,
-                            responseDetail: item.responseDetail,
-                            limit: item.limit
-                          }) : setEditWecomLinkData({
-                            _id: item._id,
-                            name: item.name,
-                            limit: item.limit,
-                            wecomConfig: item.wecomConfig
-                          })
+                          type === 'share'
+                            ? setEditLinkData({
+                                _id: item._id,
+                                name: item.name,
+                                responseDetail: item.responseDetail,
+                                limit: item.limit
+                              })
+                            : setEditWecomLinkData({
+                                _id: item._id,
+                                name: item.name,
+                                limit: item.limit,
+                                wecomConfig: item.wecomConfig
+                              })
                       },
                       {
                         label: t('common.Delete'),
@@ -227,29 +255,28 @@ const Share = ({ appId, type = OutLinkTypeEnum.share }: { appId: string, type: O
           onClose={() => setEditLinkData(undefined)}
         />
       )}
-      {
-        (!!editWecomLinkData &&
-          <WecomEditModal
-            appId={appId}
-            type={'wecom'}
-            defaultData={editWecomLinkData}
-            onCreate={(id) => {
-              const url = `${location.origin}/chat/share?shareId=${id}`;
-              copyData(url, t('core.app.share.Create link tip'));
-              refetchShareChatList();
-              setEditWecomLinkData(undefined);
-            }}
-            onEdit={() => {
-              toast({
-                status: 'success',
-                title: t('common.Update Successful')
-              });
-              refetchShareChatList();
-              setEditWecomLinkData(undefined);
-            }}
-            onClose={() => setEditWecomLinkData(undefined)}
-          />)
-      }
+      {!!editWecomLinkData && (
+        <WecomEditModal
+          appId={appId}
+          type={'wecom'}
+          defaultData={editWecomLinkData}
+          onCreate={(id) => {
+            const url = `${location.origin}/chat/share?shareId=${id}`;
+            copyData(url, t('core.app.share.Create link tip'));
+            refetchShareChatList();
+            setEditWecomLinkData(undefined);
+          }}
+          onEdit={() => {
+            toast({
+              status: 'success',
+              title: t('common.Update Successful')
+            });
+            refetchShareChatList();
+            setEditWecomLinkData(undefined);
+          }}
+          onClose={() => setEditWecomLinkData(undefined)}
+        />
+      )}
       {!!selectedLinkData && (
         <SelectUsingWayModal
           share={selectedLinkData}
