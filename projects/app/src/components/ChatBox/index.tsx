@@ -58,6 +58,7 @@ import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/consta
 import ChatItem from './components/ChatItem';
 
 import dynamic from 'next/dynamic';
+import team from '@fastgpt/global/common/error/code/team';
 const ResponseTags = dynamic(() => import('./ResponseTags'));
 const FeedbackModal = dynamic(() => import('./FeedbackModal'));
 const ReadFeedbackModal = dynamic(() => import('./ReadFeedbackModal'));
