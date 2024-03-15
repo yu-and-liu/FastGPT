@@ -346,7 +346,7 @@ const ChatBox = (
             scrollToBottom();
           }, 100);
         }
-      } catch (error) {}
+      } catch (error) { }
     },
     [questionGuide, shareId, outLinkUid, teamId, teamToken]
   );
@@ -398,13 +398,13 @@ const ChatBox = (
               })),
               ...(text
                 ? [
-                    {
-                      type: ChatItemValueTypeEnum.text,
-                      text: {
-                        content: text
-                      }
+                  {
+                    type: ChatItemValueTypeEnum.text,
+                    text: {
+                      content: text
                     }
-                  ]
+                  }
+                ]
                 : [])
             ] as UserChatItemValueItemType[],
             status: 'finish'
@@ -470,16 +470,16 @@ const ChatBox = (
               history: newChatList.map((item, i) =>
                 i === newChatList.length - 1
                   ? {
-                      ...item,
-                      value: [
-                        {
-                          type: ChatItemValueTypeEnum.text,
-                          text: {
-                            content: responseText
-                          }
+                    ...item,
+                    value: [
+                      {
+                        type: ChatItemValueTypeEnum.text,
+                        text: {
+                          content: responseText
                         }
-                      ]
-                    }
+                      }
+                    ]
+                  }
                   : item
               )
             });
@@ -633,9 +633,9 @@ const ChatBox = (
           state.map((chatItem) =>
             chatItem.dataId === chat.dataId
               ? {
-                  ...chatItem,
-                  userGoodFeedback: isGoodFeedback ? undefined : 'yes'
-                }
+                ...chatItem,
+                userGoodFeedback: isGoodFeedback ? undefined : 'yes'
+              }
               : chatItem
           )
         );
@@ -650,7 +650,7 @@ const ChatBox = (
             outLinkUid,
             userGoodFeedback: isGoodFeedback ? undefined : 'yes'
           });
-        } catch (error) {}
+        } catch (error) { }
       };
     },
     [appId, chatId, feedbackType, outLinkUid, shareId, teamId, teamToken]
@@ -708,7 +708,7 @@ const ChatBox = (
               teamToken,
               outLinkUid
             });
-          } catch (error) {}
+          } catch (error) { }
         };
       } else {
         return () => setFeedbackId(chat.dataId);
@@ -744,9 +744,9 @@ const ChatBox = (
             state.map((chatItem) =>
               chatItem.obj === ChatRoleEnum.AI && chatItem.dataId === chat.dataId
                 ? {
-                    ...chatItem,
-                    customFeedbacks: chatItem.customFeedbacks?.filter((_, index) => index !== i)
-                  }
+                  ...chatItem,
+                  customFeedbacks: chatItem.customFeedbacks?.filter((_, index) => index !== i)
+                }
                 : chatItem
             )
           );
@@ -978,6 +978,8 @@ const ChatBox = (
           chatId={chatId}
           chatItemId={feedbackId}
           shareId={shareId}
+          teamId={teamId}
+          teamToken={teamToken}
           outLinkUid={outLinkUid}
           onClose={() => setFeedbackId(undefined)}
           onSuccess={(content: string) => {
@@ -1010,7 +1012,7 @@ const ChatBox = (
                 chatId,
                 chatItemId: readFeedbackData.chatItemId
               });
-            } catch (error) {}
+            } catch (error) { }
             setReadFeedbackData(undefined);
           }}
         />
@@ -1035,9 +1037,9 @@ const ChatBox = (
               state.map((chatItem) =>
                 chatItem.dataId === adminMarkData.chatItemId
                   ? {
-                      ...chatItem,
-                      adminFeedback
-                    }
+                    ...chatItem,
+                    adminFeedback
+                  }
                   : chatItem
               )
             );
