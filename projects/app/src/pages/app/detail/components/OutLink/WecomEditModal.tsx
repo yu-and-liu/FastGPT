@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Flex, Box, Button, ModalFooter, ModalBody, Input, Switch } from '@chakra-ui/react';
-import MyModal from '@/components/MyModal';
+import MyModal from '@fastgpt/web/components/common/MyModal';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import MyTooltip from '@/components/MyTooltip';
 import { OutLinkTypeEnum } from '@fastgpt/global/support/outLink/constant';
@@ -146,7 +146,7 @@ const WecomEditModal = ({
           <Box flex={'0 0 90px'}>{t('outlink.WXWORK_TOKEN')}</Box>
           <Input
             placeholder={t('outlink.WXWORK_TOKEN') || 'Link Name'}
-            maxLength={20}
+
             {...register('wecomConfig.WXWORK_TOKEN', {
               required: t('common.Name is empty') || 'Name is empty'
             })}
@@ -156,7 +156,7 @@ const WecomEditModal = ({
           <Box flex={'0 0 90px'}>{t('outlink.WXWORK_AESKEY')}</Box>
           <Input
             placeholder={t('outlink.WXWORK_AESKEY') || 'Link Name'}
-            maxLength={20}
+
             {...register('wecomConfig.WXWORK_AESKEY', {
               required: t('common.Name is empty') || 'Name is empty'
             })}
@@ -166,7 +166,7 @@ const WecomEditModal = ({
           <Box flex={'0 0 90px'}>{t('outlink.WXWORK_SECRET')}</Box>
           <Input
             placeholder={t('outlink.WXWORK_SECRET') || 'Link Name'}
-            maxLength={20}
+
             {...register('wecomConfig.WXWORK_SECRET', {
               required: t('common.Name is empty') || 'Name is empty'
             })}
@@ -176,7 +176,7 @@ const WecomEditModal = ({
           <Box flex={'0 0 90px'}>{t('outlink.WXWORD_ID')}</Box>
           <Input
             placeholder={t('outlink.WXWORD_ID') || 'Link Name'}
-            maxLength={20}
+
             {...register('wecomConfig.WXWORD_ID', {
               required: t('common.Name is empty') || 'Name is empty'
             })}

@@ -41,7 +41,6 @@ import { useTranslation } from 'next-i18next';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MyTooltip from '@/components/MyTooltip';
-import MyModal from '@/components/MyModal';
 import dayjs from 'dayjs';
 import { getDocPath } from '@/web/common/system/doc';
 import dynamic from 'next/dynamic';
@@ -81,9 +80,9 @@ const FeiShu = ({ appId }: { appId: string }) => {
           size={['sm', 'md']}
           {...(shareChatList.length >= 10
             ? {
-                isDisabled: true,
-                title: t('core.app.share.Amount limit tip')
-              }
+              isDisabled: true,
+              title: t('core.app.share.Amount limit tip')
+            }
             : {})}
           onClick={() => setEditFeiShuLinkData(defaultFeishuOutLinkForm)}
         >
@@ -116,11 +115,10 @@ const FeiShu = ({ appId }: { appId: string }) => {
                 <Td>
                   {Math.round(item.usagePoints)}
                   {feConfigs?.isPlus
-                    ? `${
-                        item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
-                          ? ` / ${item.limit.maxUsagePoints}`
-                          : ` / ${t('common.Unlimited')}`
-                      }`
+                    ? `${item.limit?.maxUsagePoints && item.limit.maxUsagePoints > -1
+                      ? ` / ${item.limit.maxUsagePoints}`
+                      : ` / ${t('common.Unlimited')}`
+                    }`
                     : ''}
                 </Td>
                 <Td>{item.responseDetail ? '✔' : '✖'}</Td>

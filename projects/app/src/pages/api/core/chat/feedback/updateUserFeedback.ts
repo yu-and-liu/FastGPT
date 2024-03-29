@@ -7,7 +7,6 @@ import { autChatCrud } from '@/service/support/permission/auth/chat';
 
 /* 初始化我的聊天框，需要身份验证 */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-<<<<<<< HEAD
   const {
     appId,
     chatId,
@@ -19,10 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     userBadFeedback,
     userGoodFeedback
   } = req.body as UpdateChatFeedbackProps;
-=======
-  const { appId, chatId, chatItemId, shareId, outLinkUid, teamId, teamToken, userBadFeedback, userGoodFeedback } =
-    req.body as UpdateChatFeedbackProps;
->>>>>>> 7d2732aa (fix feckbackMoal  auth bug)
 
   try {
     await connectToDatabase();
@@ -34,8 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       teamId,
       teamToken,
       chatId,
-      teamId,
-      teamToken,
       shareId,
       outLinkUid,
       per: 'r'

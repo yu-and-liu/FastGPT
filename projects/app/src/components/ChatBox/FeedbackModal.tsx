@@ -12,8 +12,6 @@ const FeedbackModal = ({
   teamId,
   teamToken,
   shareId,
-  teamId,
-  teamToken,
   outLinkUid,
   onSuccess,
   onClose
@@ -41,8 +39,6 @@ const FeedbackModal = ({
         teamId,
         teamToken,
         shareId,
-        teamId,
-        teamToken,
         outLinkUid,
         userBadFeedback: val
       });

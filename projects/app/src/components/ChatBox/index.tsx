@@ -978,8 +978,6 @@ const ChatBox = (
           chatId={chatId}
           chatItemId={feedbackId}
           shareId={shareId}
-          teamId={teamId}
-          teamToken={teamToken}
           outLinkUid={outLinkUid}
           onClose={() => setFeedbackId(undefined)}
           onSuccess={(content: string) => {
